@@ -19,6 +19,27 @@ body {
   color: var(--tinta);
   font-family: var(--font-text);
 }
+/* Peu de pàgina sempre al final de la finestra, encara que el contingut
+   de la pantalla (p. ex. la cistella buida) no ompli l'alçada: cada
+   pantalla és una única <section> filla directa de <body> (app/page.tsx),
+   així que en fem una columna flex de com a mínim tota l'alçada visible i
+   deixem que el bloc de contingut ("contenidor"/"contenidor-estret")
+   s'expandeixi — el peu queda avall sense necessitat de posicionar-lo de
+   forma absoluta ni dependre de JavaScript. */
+html,
+body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+body > section {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
 img,
 svg {
   display: block;
@@ -232,11 +253,15 @@ a {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 2rem;
+  flex: 1 0 auto;
+  width: 100%;
 }
 .contenidor-estret {
   max-width: 680px;
   margin: 0 auto;
   padding: 0 2rem;
+  flex: 1 0 auto;
+  width: 100%;
 }
 
 .site-footer {
@@ -1216,6 +1241,19 @@ a {
   font-size: 0.72rem;
   font-weight: 600;
   line-height: 1;
+}
+
+/* Fotografia de la cistella buida: mateix tractament honest que la resta
+   de fotografia d'exemple del lloc (placeholder + etiqueta), sense
+   centrar-la -- manté el mateix marge esquerre que el títol i el text en
+   comptes de convertir la pantalla buida en una composició centrada de
+   manual, que desentonaria amb la resta del lloc. */
+.cistella-buida-foto {
+  position: relative;
+  width: 100%;
+  max-width: 20rem;
+  aspect-ratio: 3 / 4;
+  margin: 0.5rem 0 2.25rem;
 }
 
 /* Selector de quantitat (fitxa de producte i cistella). */

@@ -63,6 +63,16 @@ export function Cistella() {
             <h1>La teva cistella</h1>
             <p>Encara no hi has afegit cap ram.</p>
           </div>
+          <div className="cistella-buida-foto placeholder">
+            <Image
+              src="/assets/foto-2.jpg"
+              alt="Fotografia d'exemple de l'espai de treball de Nunu Flowers"
+              fill
+              sizes="(max-width: 640px) 80vw, 320px"
+              style={{ objectFit: "cover" }}
+            />
+            <span className="badge-exemple">Foto d&apos;exemple</span>
+          </div>
           <NavLink to="botiga" className="boto boto-principal">
             Anar a la botiga
           </NavLink>
