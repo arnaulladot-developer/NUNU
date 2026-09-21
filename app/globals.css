@@ -1,0 +1,1184 @@
+:root {
+  color-scheme: light;
+  --paper: #fbf6f2;
+  --rosa: #f0d0e0;
+  --tinta: #4b4048;
+  --accent: #a8456f;
+  --pedra: #665a5e;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-text: "Work Sans", system-ui, sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--tinta);
+  font-family: var(--font-text);
+}
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+a {
+  color: inherit;
+}
+
+/* Contenidor de fotografia. Les dotze fotos d'aquesta maqueta són EXEMPLES
+   que el client ha facilitat per veure la pàgina plena -- no és fotografia
+   de producte confirmada. Es marquen amb una etiqueta honesta a les
+   ubicacions més visibles (metode-de-disseny.md §7: "un marcador és més
+   professional que una falsificació"). Quan hi hagi fotografia real dels
+   rams de flor seca, aquestes es substitueixen una a una. */
+.placeholder {
+  position: relative;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    135deg,
+    var(--rosa),
+    var(--rosa) 10px,
+    #d7d7c8 10px,
+    #d7d7c8 11px
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pedra);
+  font-family: var(--font-text);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+  padding: 1rem;
+}
+.placeholder img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.badge-exemple {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 2;
+  background: var(--rosa);
+  color: var(--tinta);
+  font-family: var(--font-text);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+/* L'etiqueta del hero viu com a fill directe de .hero, no del
+   .placeholder -- el .placeholder del hero és més gran que la finestra
+   visible (inset:-6%, per l'efecte de zoom lent), i una etiqueta
+   posicionada dins seu quedava fora de la pantalla (bug corregit). */
+.hero .badge-exemple {
+  background: rgba(251, 246, 242, 0.88);
+  left: auto;
+  right: 0.75rem;
+  bottom: auto;
+  top: 1.5rem;
+}
+/* A dalt en comptes de a baix -- a baix hi ha els punts del carrusel. */
+.carrusel-item .badge-exemple {
+  left: 0.75rem;
+  top: 0.75rem;
+  bottom: auto;
+}
+
+/* ---- capçalera del lloc: rectangle flotant amb cantons arrodonits i vidre
+   esmerilat, centrat i separat de la vora superior (comuna a totes les
+   pantalles). El "vidre" -- fons translúcid + desenfocament -- ve del
+   mateix mecanisme que ja fem servir a Terrer, aplicat ara de forma
+   permanent en comptes de nomes en fer scroll. */
+.site-header {
+  position: fixed;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  padding: 0.6rem 0.75rem 0.6rem 1.25rem;
+  border-radius: 28px;
+  max-width: calc(100% - 2.5rem);
+  background: color-mix(in srgb, var(--paper) 74%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(16px);
+  backdrop-filter: saturate(1.4) blur(16px);
+  border: 1px solid color-mix(in srgb, var(--rosa) 65%, transparent);
+  box-shadow: 0 10px 30px rgba(75, 64, 72, 0.14);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  transition:
+    transform 180ms var(--ease-out, ease-out),
+    box-shadow 180ms ease-out,
+    opacity 220ms ease-out;
+}
+.site-header:hover {
+  transform: translateX(-50%) scale(1.015);
+  box-shadow: 0 14px 38px rgba(75, 64, 72, 0.2);
+}
+.site-header nav {
+  display: flex;
+  gap: 0.25rem;
+  font-family: var(--font-text);
+  font-size: 1.05rem;
+}
+/* Enllaç de navegació en píndola (Mercury: "Navigation Pill Link"), recolorit
+   amb els tons de NUNU en comptes del blau cobalt de la referència. */
+.site-header nav a {
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  transition:
+    background-color 120ms ease-out,
+    color 120ms ease-out;
+}
+.site-header nav a:hover {
+  background: var(--rosa);
+}
+.marca-nom {
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  display: block;
+}
+.marca-nom img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Botó de menú per a mòbil: només substitueix els enllaços en línia per
+   sota de 640px -- la píndola no té amplada per a quatre enllaços i el
+   logo un cop la pantalla és estreta. */
+.menu-mobil {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.menu-mobil span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--tinta);
+  border-radius: 2px;
+  transition:
+    transform 200ms ease-out,
+    opacity 200ms ease-out;
+}
+.site-header.menu-obert .menu-mobil span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.site-header.menu-obert .menu-mobil span:nth-child(2) {
+  opacity: 0;
+}
+.site-header.menu-obert .menu-mobil span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 640px) {
+  .site-header {
+    gap: 0.5rem;
+    padding: 0.6rem 0.7rem;
+  }
+  .site-header nav {
+    display: none;
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.75rem;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    -webkit-backdrop-filter: saturate(1.4) blur(16px);
+    backdrop-filter: saturate(1.4) blur(16px);
+    border: 1px solid color-mix(in srgb, var(--rosa) 65%, transparent);
+    border-radius: 20px;
+    box-shadow: 0 14px 30px rgba(75, 64, 72, 0.18);
+  }
+  .site-header nav a {
+    padding: 0.7rem 1rem;
+  }
+  .site-header.menu-obert nav {
+    display: flex;
+  }
+  .menu-mobil {
+    display: flex;
+  }
+}
+
+.contenidor {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+.contenidor-estret {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.site-footer {
+  border-top: 1px solid var(--rosa);
+  margin-top: 5rem;
+  padding: 2rem;
+  font-size: 0.85rem;
+  color: var(--pedra);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Peu de la pàgina principal: versió a tres columnes. */
+.site-footer--inici {
+  display: block;
+  padding: 3rem 0 0;
+}
+.site-footer-graella {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 2rem;
+  padding-bottom: 2.5rem;
+}
+@media (max-width: 720px) {
+  .site-footer-graella {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+}
+.site-footer-marca .marca-nom {
+  margin-bottom: 0.75rem;
+}
+.site-footer-marca .marca-nom img {
+  height: 32px;
+  width: 32px;
+}
+.site-footer-marca p {
+  margin: 0;
+  max-width: 32ch;
+}
+.site-footer-nav,
+.site-footer-contacte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+}
+.site-footer-nav a,
+.site-footer-contacte a {
+  text-decoration: none;
+  color: var(--pedra);
+  transition: color 120ms ease-out;
+}
+.site-footer-nav a:hover,
+.site-footer-contacte a:hover {
+  color: var(--accent);
+}
+.site-footer-legal {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-top: 1px solid var(--rosa);
+  padding: 1.25rem 0;
+  font-size: 0.78rem;
+}
+
+/* ---- 1. INICI ---- */
+/* Efecte de portada de Terrer (claude/design-system.md §5.7): el hero queda
+   fix amb 'position: sticky' pur -- sense JavaScript ni llibreria -- i el
+   panell següent el va cobrint en pujar. Zero cost de rendiment. */
+.hero {
+  height: 100svh;
+  min-height: 480px;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+.hero .placeholder {
+  position: absolute;
+  inset: -6%;
+  animation: heroZoom 22s ease-in-out infinite alternate;
+}
+.hero .placeholder img {
+  object-position: 70% 45%;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--paper) 0%,
+    var(--paper) 16%,
+    transparent 56%
+  );
+}
+@media (max-width: 760px) {
+  .hero::before {
+    background: linear-gradient(
+      90deg,
+      var(--paper) 0%,
+      var(--paper) 46%,
+      transparent 88%
+    );
+  }
+}
+@keyframes heroZoom {
+  from {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+.hero-contingut {
+  position: relative;
+  z-index: 2;
+  padding: 0 2rem;
+  max-width: 640px;
+  color: var(--tinta);
+  will-change: transform, opacity;
+}
+@media (max-width: 760px) {
+  .hero-contingut {
+    max-width: 100%;
+  }
+}
+.hero-panel {
+  position: relative;
+  z-index: 2;
+  background: var(--paper);
+  box-shadow: 0 -24px 48px rgba(33, 20, 26, 0.16);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero .placeholder {
+    animation: none;
+    transform: scale(1.05);
+  }
+  .inici-bloc .placeholder img {
+    transition: none;
+  }
+  .inici-bloc:hover .placeholder img {
+    transform: none;
+  }
+}
+.hero-contingut h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  line-height: 1.05;
+  margin: 0 0 0.75rem;
+}
+.hero-contingut p {
+  font-size: 1.15rem;
+  margin: 0 0 1.75rem;
+  max-width: 34ch;
+  color: var(--pedra);
+}
+.botons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Botó en píndola (Mercury: "Primary CTA Button" / "Ghost Outline Button"). */
+.boto {
+  display: inline-block;
+  padding: 0.85rem 1.75rem;
+  font-family: var(--font-text);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    transform 120ms ease-out,
+    background-color 120ms ease-out,
+    opacity 120ms ease-out;
+}
+.boto:active {
+  transform: scale(0.97);
+}
+.boto-principal {
+  background: var(--accent);
+  color: var(--paper);
+  border-color: var(--accent);
+}
+.boto-principal:hover {
+  opacity: 0.92;
+}
+.boto-secundari {
+  background: transparent;
+  color: var(--paper);
+  border-color: var(--paper);
+}
+.boto-secundari:hover {
+  background: rgba(251, 246, 242, 0.15);
+}
+.boto-principal.sobre-clar {
+  background: var(--accent);
+  color: var(--paper);
+}
+.boto-secundari.sobre-clar {
+  background: transparent;
+  color: var(--tinta);
+  border-color: var(--tinta);
+}
+.boto-secundari.sobre-clar:hover {
+  background: var(--rosa);
+}
+
+/* Capçalera a Inici: la píndola de vidre és la mateixa a totes les
+   pantalles; aquí només se li commuta la visibilitat amb `.header--reveal`
+   (a React, la classe la posa nomes qui la munta a Inici — ja no cal
+   escopir-la per `id` de pantalla com feia la maqueta HTML). Amagada
+   mentre s'és a dalt de tot de la foto a pantalla completa, apareix quan
+   es baixa "una mica". */
+.site-header.header--reveal {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-14px);
+  pointer-events: none;
+}
+.site-header.header--reveal.nav-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.inici-seccio {
+  padding: 5.5rem 0 4.5rem;
+}
+.inici-seccio h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.625rem, 3.4vw, 2.125rem);
+  margin: 0 0 0.6rem;
+}
+.inici-seccio-intro {
+  color: var(--pedra);
+  max-width: 52ch;
+  margin: 0;
+  font-size: 1.02rem;
+}
+
+/* Història de la marca: bloc de text sol, sense foto. */
+.inici-historia {
+  max-width: 62ch;
+  margin: 0 auto;
+  padding: 5rem 0;
+  text-align: center;
+  border-top: 1px solid var(--rosa);
+}
+.inici-historia-destacat {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.375rem, 2.6vw, 1.75rem);
+  color: var(--tinta);
+  line-height: 1.4;
+  margin: 0 0 1.25rem;
+}
+.inici-historia-cos {
+  color: var(--pedra);
+  font-size: 0.95rem;
+  margin: 0;
+}
+.inici-graella-dos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+}
+@media (max-width: 720px) {
+  .inici-graella-dos {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cada bloc és un únic enllaç -- tota la targeta és clicable -- amb dos
+   micro-moviments d'estil (zoom lent de la foto i fletxa que llisca). */
+.inici-bloc {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.inici-bloc .placeholder {
+  aspect-ratio: 4 / 5;
+  margin-bottom: 1.25rem;
+}
+.inici-bloc .placeholder img {
+  transition: transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.inici-bloc:hover .placeholder img {
+  transform: scale(1.045);
+}
+.inici-bloc h3 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 500;
+  margin: 0 0 0.4rem;
+}
+.inici-bloc p {
+  color: var(--pedra);
+  font-size: 0.95rem;
+  margin: 0 0 0.9rem;
+}
+.enllac-fletxa {
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+  color: inherit;
+}
+.enllac-fletxa .fletxa {
+  display: inline-block;
+  width: 1.1em;
+  height: 1px;
+  background: currentColor;
+  position: relative;
+  transition: width 220ms ease-out;
+}
+.enllac-fletxa .fletxa::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 0.4em;
+  height: 0.4em;
+  border-right: 1px solid currentColor;
+  border-top: 1px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+}
+.inici-bloc:hover .enllac-fletxa .fletxa {
+  width: 1.6em;
+}
+.enllac-fletxa:hover .fletxa {
+  width: 1.6em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .enllac-fletxa .fletxa {
+    transition: none;
+  }
+}
+
+/* Variant "enrere": mateix component, mirallat. */
+.enllac-fletxa--enrere {
+  color: var(--pedra);
+  margin-bottom: 1.5rem;
+  transition: color 120ms ease-out;
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+.enllac-fletxa--enrere:hover {
+  color: var(--tinta);
+}
+.enllac-fletxa--enrere .fletxa::after {
+  right: auto;
+  left: 0;
+  border-right: none;
+  border-top: none;
+  border-left: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+}
+.pagina-tornar {
+  padding-top: 7rem;
+  display: inline-flex;
+}
+
+/* ---- 2. BOTIGA ---- */
+.pagina-cap {
+  padding: 7rem 0 1.75rem;
+}
+.pagina-cap h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+  margin: 0 0 0.5rem;
+}
+.pagina-cap p {
+  color: var(--pedra);
+  margin: 0;
+  max-width: 60ch;
+}
+
+/* Graella de producte, cada tres de costat. */
+.productes-graella {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--rosa);
+  border: 1px solid var(--rosa);
+  margin-top: 1rem;
+}
+@media (max-width: 900px) {
+  .productes-graella {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .productes-graella {
+    grid-template-columns: 1fr;
+  }
+}
+.producte-targeta {
+  background: var(--paper);
+  padding: 1.5rem 1.25rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+}
+.producte-targeta .placeholder {
+  aspect-ratio: 4 / 5;
+  margin-bottom: 1.1rem;
+  overflow: hidden;
+}
+.producte-targeta .placeholder img {
+  transition: transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.producte-targeta:hover .placeholder img {
+  transform: scale(1.045);
+}
+@media (prefers-reduced-motion: reduce) {
+  .producte-targeta .placeholder img {
+    transition: none;
+  }
+  .producte-targeta:hover .placeholder img {
+    transform: none;
+  }
+}
+.producte-nom {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0 0 0.35rem;
+}
+.producte-composicio {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--pedra);
+  margin: 0 0 0.9rem;
+  flex-grow: 1;
+}
+.producte-preu {
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+.producte-targeta-cta {
+  background: var(--rosa);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+.producte-targeta-cta p {
+  margin: 0;
+  color: var(--tinta);
+  font-size: 0.95rem;
+}
+
+/* ---- 3. FITXA DE PRODUCTE ---- */
+.fitxa {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 3rem;
+  padding: 0 0 4rem;
+}
+@media (max-width: 800px) {
+  .fitxa {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+/* Carrusel: 'scroll-snap' natiu fa el gest de passar el dit funcionar
+   sense cap llibreria; els botons i els punts hi afegeixen ratolí/teclat. */
+.carrusel {
+  position: relative;
+}
+.carrusel-pista {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: 2px;
+}
+.carrusel-pista::-webkit-scrollbar {
+  display: none;
+}
+.carrusel-item {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  aspect-ratio: 4 / 5;
+}
+.carrusel-fletxa {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--paper) 42%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--tinta);
+  padding: 0 0 0.1rem;
+  box-shadow: 0 4px 14px rgba(75, 64, 72, 0.14);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 160ms ease-out,
+    background-color 120ms ease-out;
+}
+.carrusel:hover .carrusel-fletxa,
+.carrusel:focus-within .carrusel-fletxa {
+  opacity: 1;
+  pointer-events: auto;
+}
+.carrusel-fletxa:hover {
+  background: color-mix(in srgb, var(--paper) 72%, transparent);
+}
+.carrusel-anterior {
+  left: 0.75rem;
+}
+.carrusel-seguent {
+  right: 0.75rem;
+}
+@media (hover: none) {
+  .carrusel-fletxa {
+    opacity: 1;
+    pointer-events: auto;
+    background: color-mix(in srgb, var(--paper) 55%, transparent);
+  }
+}
+.carrusel-punts {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.85rem;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.carrusel-punts button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--paper) 65%, transparent);
+  box-shadow: 0 0 0 1px rgba(33, 20, 26, 0.15);
+  transition:
+    background-color 150ms ease-out,
+    transform 150ms ease-out;
+}
+.carrusel-punts button.actiu {
+  background: var(--paper);
+  transform: scale(1.3);
+}
+@media (prefers-reduced-motion: reduce) {
+  .carrusel-pista {
+    scroll-behavior: auto;
+  }
+  .carrusel-fletxa {
+    transition: none;
+  }
+}
+.carrusel-gran .carrusel-item {
+  aspect-ratio: 16 / 9;
+}
+@media (max-width: 700px) {
+  .carrusel-gran .carrusel-item {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+.fitxa-info .etiqueta-nota {
+  font-family: var(--font-text);
+  font-size: 0.8rem;
+  color: var(--pedra);
+  text-transform: none;
+  border-bottom: 1px solid var(--rosa);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+.fitxa-info h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+}
+.fitxa-preu {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 0 0 1.5rem;
+}
+.fitxa-bloc {
+  margin-bottom: 1.75rem;
+}
+.fitxa-bloc h2 {
+  font-family: var(--font-text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--pedra);
+  margin: 0 0 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.composicio-llista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rosa);
+}
+.composicio-llista li {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--rosa);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.composicio-llista li span:last-child {
+  font-family: var(--font-text);
+  font-style: normal;
+  color: var(--pedra);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.fitxa-info .boto {
+  width: 100%;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* ---- 4. PROJECTES ---- */
+.projectes-graella {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 2rem;
+}
+@media (max-width: 700px) {
+  .projectes-graella {
+    grid-template-columns: 1fr;
+  }
+}
+.projecte-item {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+}
+.projecte-item .placeholder {
+  aspect-ratio: 1 / 1;
+}
+.projecte-item .placeholder img {
+  transition: transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.projecte-item:hover .placeholder img {
+  transform: scale(1.045);
+}
+@media (prefers-reduced-motion: reduce) {
+  .projecte-item .placeholder img {
+    transition: none;
+  }
+  .projecte-item:hover .placeholder img {
+    transform: none;
+  }
+}
+.projecte-item .etiqueta {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 1rem 1.25rem;
+  z-index: 2;
+  background: linear-gradient(0deg, rgba(33, 30, 26, 0.65), transparent);
+  color: var(--paper);
+}
+.projecte-item .etiqueta h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+}
+.projecte-item .etiqueta span {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+/* ---- 4b. PROJECTE — DETALL ---- */
+.projecte-detall-hero {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 7rem 1.25rem 0;
+}
+@media (max-width: 700px) {
+  .projecte-detall-hero {
+    padding: 7rem 0 0;
+  }
+}
+.projecte-detall-cos {
+  padding: 2.5rem 0 4rem;
+}
+.projecte-detall-cos .etiqueta-nota {
+  font-family: var(--font-text);
+  font-size: 0.85rem;
+  color: var(--pedra);
+  text-transform: none;
+  border-bottom: 1px solid var(--rosa);
+  padding-bottom: 0.75rem;
+  margin: 0 0 1rem;
+}
+.projecte-detall-cos h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  margin: 0 0 1.25rem;
+}
+.projecte-descripcio {
+  color: var(--tinta);
+  font-size: 1.05rem;
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ---- 5. CONTACTE / FORMULARI ---- */
+.contacte-graella {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  padding: 3rem 0 4rem;
+}
+@media (max-width: 760px) {
+  .contacte-graella {
+    grid-template-columns: 1fr;
+  }
+}
+.camp {
+  margin-bottom: 1.25rem;
+}
+.camp label {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+  color: var(--tinta);
+}
+.camp input,
+.camp select,
+.camp textarea {
+  width: 100%;
+  font-family: var(--font-text);
+  font-size: 1rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--pedra);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--tinta);
+}
+.camp input:focus,
+.camp select:focus,
+.camp textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+.contacte-info h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.4rem;
+  margin-top: 0;
+}
+.contacte-info dl {
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+.contacte-info dt {
+  color: var(--pedra);
+  margin-top: 0.9rem;
+}
+.contacte-info dd {
+  margin: 0.15rem 0 0;
+}
+.contacte-nota {
+  margin: 1.5rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rosa);
+  color: var(--pedra);
+  font-size: 0.85rem;
+  max-width: 36ch;
+}
+
+/* ---- 6. SEGUIMENT DE COMANDA ---- */
+.seguiment-cerca {
+  padding: 7rem 0 4rem;
+}
+.seguiment-cerca-graella {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+@media (max-width: 800px) {
+  .seguiment-cerca-graella {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+.seguiment-cerca-foto {
+  aspect-ratio: 4 / 5;
+}
+.seguiment-cerca-info .num-comanda {
+  margin: 0 0 0.35rem;
+}
+.seguiment-cerca-info h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 2rem;
+  margin: 0 0 0.75rem;
+}
+.seguiment-intro {
+  color: var(--pedra);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 1.75rem;
+  max-width: 44ch;
+}
+.seguiment {
+  padding: 7rem 0 4rem;
+}
+.seguiment-cap {
+  border-bottom: 1px solid var(--rosa);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+.num-comanda {
+  font-family: var(--font-text);
+  font-size: 0.85rem;
+  color: var(--pedra);
+  margin: 0 0 0.35rem;
+}
+.seguiment-cap h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.75rem;
+  margin: 0;
+}
+.estats {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin: 2.5rem 0;
+}
+.estats::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  right: 9px;
+  height: 1px;
+  background: var(--rosa);
+  z-index: 0;
+}
+.estat {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+}
+.estat .punt {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--pedra);
+}
+.estat.fet .punt {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.estat.actual .punt {
+  background: var(--paper);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--rosa);
+}
+.estat span {
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--pedra);
+}
+.estat.fet span,
+.estat.actual span {
+  color: var(--tinta);
+  font-weight: 500;
+}
+.seguiment-detall {
+  background: var(--rosa);
+  padding: 1.5rem 1.75rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+}
+.seguiment-detall p {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+.seguiment-detall p:last-child {
+  margin-bottom: 0;
+}
