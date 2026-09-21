@@ -45,6 +45,11 @@ export const PRODUCTES: Producte[] = [
   },
 ];
 
+/** Cerca un producte pel seu identificador; `undefined` si no existeix. */
+export function getProducteById(id: string): Producte | undefined {
+  return PRODUCTES.find((producte) => producte.id === id);
+}
+
 export interface ProjecteResum {
   id: string;
   titol: string;

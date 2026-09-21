@@ -15,4 +15,5 @@ export type ScreenId =
   | "projectes"
   | "projecte-detall"
   | "contacte"
-  | "seguiment";
+  | "seguiment"
+  | "cistella";

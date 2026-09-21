@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { BackLink } from "@/components/BackLink";
 import { Carousel, type CarouselImage } from "@/components/Carousel";
+import { QuantityStepper } from "@/components/QuantityStepper";
+import { useCart } from "@/context/cart";
 
 const FOTOS_FITXA: CarouselImage[] = [
   {
@@ -15,12 +18,24 @@ const FOTOS_FITXA: CarouselImage[] = [
   { src: "/assets/foto-5.jpg", alt: "Fotografia d'exemple de producte, vista 3" },
 ];
 
+const PRODUCT_ID = "vesc";
+
 /**
  * De moment tots els productes de la Botiga porten a aquesta mateixa fitxa
  * d'exemple (decisió explícita del client mentre es prepara el catàleg
  * real) — no hi ha encara una fitxa per producte.
  */
 export function Fitxa() {
+  const { afegir } = useCart();
+  const [quantitat, setQuantitat] = useState(1);
+  const [confirmat, setConfirmat] = useState(false);
+
+  function handleAfegir() {
+    afegir(PRODUCT_ID, quantitat);
+    setConfirmat(true);
+    window.setTimeout(() => setConfirmat(false), 1800);
+  }
+
   return (
     <section>
       <SiteHeader />
@@ -79,13 +94,18 @@ export function Fitxa() {
                 sota, 4,90 €.
               </p>
             </div>
-            <a
+            <div className="fitxa-quantitat">
+              <label htmlFor="fitxa-quantitat">Quantitat</label>
+              <QuantityStepper id="fitxa-quantitat" value={quantitat} onChange={setQuantitat} />
+            </div>
+            <button
+              type="button"
               className="boto boto-principal"
-              href="#"
-              onClick={(event) => event.preventDefault()}
+              style={{ width: "100%" }}
+              onClick={handleAfegir}
             >
-              Afegir al cistell
-            </a>
+              {confirmat ? "Afegit a la cistella ✓" : "Afegir a la cistella"}
+            </button>
           </div>
         </div>
       </div>

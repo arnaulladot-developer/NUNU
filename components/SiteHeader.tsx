@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { NavLink } from "@/components/NavLink";
 import { useScrollThreshold } from "@/hooks/useScrollThreshold";
+import { useCart } from "@/context/cart";
 import type { ScreenId } from "@/lib/types";
 
 const ENLLAÇOS: { to: ScreenId; etiqueta: string }[] = [
@@ -25,6 +26,7 @@ export function SiteHeader({ revealOnScroll = false }: SiteHeaderProps) {
   const [menuObert, setMenuObert] = useState(false);
   const haBaixat = useScrollThreshold(LLINDAR_REVEAL);
   const navVisible = revealOnScroll ? haBaixat : true;
+  const { totalArticles } = useCart();
 
   const classes = [
     "site-header",
@@ -55,6 +57,23 @@ export function SiteHeader({ revealOnScroll = false }: SiteHeaderProps) {
             {enllaç.etiqueta}
           </NavLink>
         ))}
+        <NavLink
+          to="cistella"
+          className="site-header-cistella"
+          onNavigate={() => setMenuObert(false)}
+          aria-label={
+            totalArticles > 0
+              ? `Cistella, ${totalArticles} ${totalArticles === 1 ? "article" : "articles"}`
+              : "Cistella"
+          }
+        >
+          <span aria-hidden="true">Cistella</span>
+          {totalArticles > 0 && (
+            <span className="cistella-comptador" aria-hidden="true">
+              {totalArticles}
+            </span>
+          )}
+        </NavLink>
       </nav>
       <button
         type="button"

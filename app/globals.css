@@ -661,8 +661,20 @@ a {
   padding: 1.5rem 1.25rem 1.75rem;
   display: flex;
   flex-direction: column;
+}
+/* La imatge, el nom i el preu són un enllaç; "Afegir a la cistella" és un
+   botó germà (no es pot clavar un <button> dins d'un <a>). */
+.producte-targeta-link {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   text-decoration: none;
   color: inherit;
+}
+.producte-afegir {
+  margin-top: 1rem;
+  width: 100%;
+  text-align: center;
 }
 .producte-targeta .placeholder {
   aspect-ratio: 4 / 5;
@@ -1181,4 +1193,208 @@ a {
 }
 .seguiment-detall p:last-child {
   margin-bottom: 0;
+}
+
+/* ---- 7. CISTELLA ---- */
+/* Enllaç de la cistella al menú: mateixa píndola que la resta, amb un
+   comptador petit que només apareix quan hi ha articles. */
+.site-header-cistella {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.cistella-comptador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.3em;
+  height: 1.3em;
+  padding: 0 0.3em;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--paper);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Selector de quantitat (fitxa de producte i cistella). */
+.quantitat-control {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--pedra);
+  border-radius: 2px;
+  width: fit-content;
+}
+.quantitat-control button {
+  width: 2.25rem;
+  border: none;
+  background: none;
+  color: var(--tinta);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 120ms ease-out;
+}
+.quantitat-control button:hover {
+  background: var(--rosa);
+}
+.quantitat-control input {
+  width: 2.75rem;
+  border: none;
+  border-left: 1px solid var(--pedra);
+  border-right: 1px solid var(--pedra);
+  text-align: center;
+  font-family: var(--font-text);
+  font-size: 0.95rem;
+  color: var(--tinta);
+  background: var(--paper);
+  /* Amaga les fletxes natives del <input type="number">: ja tenim els
+     nostres propis botons +/-, i les del navegador en dupliquen la funció. */
+  -moz-appearance: textfield;
+}
+.quantitat-control input::-webkit-outer-spin-button,
+.quantitat-control input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.fitxa-quantitat {
+  margin-bottom: 1.5rem;
+}
+.fitxa-quantitat label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--tinta);
+  margin-bottom: 0.5rem;
+}
+
+/* Llista d'articles de la cistella. */
+.cistella-llista {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--rosa);
+}
+.cistella-article {
+  display: grid;
+  grid-template-columns: 72px 1fr auto auto auto;
+  grid-template-areas: "foto info quantitat preu eliminar";
+  align-items: start;
+  gap: 1.25rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--rosa);
+}
+@media (max-width: 760px) {
+  .cistella-article {
+    grid-template-columns: 72px 1fr auto;
+    grid-template-areas:
+      "foto info eliminar"
+      "quantitat quantitat preu";
+    row-gap: 1rem;
+  }
+}
+.cistella-article-foto {
+  grid-area: foto;
+  width: 72px;
+  height: 90px;
+  flex-shrink: 0;
+}
+.cistella-article-info {
+  grid-area: info;
+}
+.cistella-article-info .producte-nom {
+  margin: 0 0 0.2rem;
+  font-size: 1.1rem;
+}
+.cistella-article-info .producte-composicio {
+  margin: 0 0 0.75rem;
+}
+.cistella-article-comentari {
+  margin: 0;
+  max-width: 32ch;
+}
+.cistella-article-comentari label {
+  font-size: 0.78rem;
+  color: var(--pedra);
+  margin-bottom: 0.3rem;
+}
+.cistella-article-comentari input {
+  font-size: 0.9rem;
+  padding: 0.5rem 0.6rem;
+}
+
+.cistella-article-quantitat {
+  grid-area: quantitat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+.cistella-etiqueta-mobil {
+  display: none;
+  font-size: 0.78rem;
+  color: var(--pedra);
+}
+
+.cistella-article-preu {
+  grid-area: preu;
+  font-family: var(--font-text);
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+  align-self: center;
+}
+
+.cistella-eliminar {
+  grid-area: eliminar;
+  border: none;
+  background: none;
+  color: var(--pedra);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.4rem;
+  align-self: center;
+  transition: color 120ms ease-out;
+}
+.cistella-eliminar:hover {
+  color: var(--accent);
+}
+
+@media (max-width: 760px) {
+  .cistella-article-quantitat {
+    align-items: flex-start;
+  }
+  .cistella-etiqueta-mobil {
+    display: block;
+  }
+  .cistella-article-preu {
+    align-self: end;
+  }
+}
+
+.cistella-resum {
+  max-width: 26rem;
+  margin: 2.5rem 0 4rem auto;
+}
+@media (max-width: 560px) {
+  .cistella-resum {
+    margin: 2.5rem auto 4rem;
+  }
+}
+.cistella-resum-linia {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: var(--pedra);
+  padding: 0.4rem 0;
+}
+.cistella-resum-total {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--tinta);
+  border-top: 1px solid var(--rosa);
+  margin-top: 0.4rem;
+  padding-top: 1rem;
+  margin-bottom: 1.5rem;
 }
