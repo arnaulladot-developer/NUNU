@@ -871,10 +871,16 @@ a {
     transition: none;
   }
 }
+.carrusel-gran {
+  min-height: 480px;
+}
 .carrusel-gran .carrusel-item {
   aspect-ratio: 16 / 9;
 }
 @media (max-width: 700px) {
+  .carrusel-gran {
+    min-height: 360px;
+  }
   .carrusel-gran .carrusel-item {
     aspect-ratio: 4 / 5;
   }
