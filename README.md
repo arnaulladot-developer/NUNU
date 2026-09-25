@@ -7,11 +7,16 @@ pròpia i compartir-la amb la clienta.
 **Què és i què no és.** Aquest projecte és el prototip de disseny —
 contingut i fotografies d'exemple, sense backend, sense pagaments i sense
 seguiment real de comandes (els formularis de Contacte i Seguiment són
-demostracions purament de client). No és encara el lloc de producció
-descrit a `arquitectura.md` (ADR-001): quan arribi aquesta fase, cada
-pantalla es converteix en una ruta real de l'App Router amb metadades i
-dades estructurades pròpies, es connecta Stripe/Bizum, i es dona d'alta
-la base de dades del catàleg i les comandes.
+demostracions purament de client; la Cistella persisteix a `localStorage`
+del navegador, sense servidor). No és encara el lloc de producció descrit
+a `arquitectura.md`: totes les pantalles viuen sota una única ruta de
+l'App Router i commuten per JavaScript de client (`context/navigation.tsx`),
+sense URL pròpia per pantalla — límit conegut i documentat a l'ADR-002, que
+cal resoldre abans de fer SEO real o d'indexar el lloc. Quan arribi la fase
+de producció, cada pantalla es converteix en una ruta real amb metadades i
+dades estructurades pròpies, es connecta Stripe i/o Bizum (ADR-004,
+bloquejat per la situació fiscal de la clienta), i es dona d'alta la base
+de dades del catàleg i les comandes.
 
 ## Instal·lació
 
@@ -41,20 +46,27 @@ i el build de producció; ha d'acabar sense errors abans de desplegar.
 
 ```
 app/
-  layout.tsx        Metadades, fonts (next/font) i CSS global
-  globals.css        Tots els tokens i estils, portats de design-system.md
-  page.tsx           Punt d'entrada: commuta entre les 7 pantalles
+  layout.tsx          Metadades, fonts (next/font) i CSS global
+  globals.css         Tots els tokens i estils, portats de design-system.md
+  page.tsx            Punt d'entrada: commuta entre les 8 pantalles
 components/
-  SiteHeader.tsx      Capçalera flotant (comuna a totes les pantalles)
-  SiteFooter.tsx      Peu de pàgina (variant "inici" i variant simple)
-  Carousel.tsx        Carrusel reutilitzable (fitxa de producte i projecte)
-  NavLink.tsx         Enllaç intern entre pantalles
-  BackLink.tsx        Botó de tornar enrere (§7.13 design-system.md)
-  ArrowLabel.tsx       Etiqueta amb fletxa animada
-  screens/            Les 7 pantalles (Inici, Botiga, Fitxa, Projectes,
-                       ProjecteDetall, Contacte, Seguiment)
+  SiteHeader.tsx        Capçalera flotant (comuna a totes les pantalles)
+  SiteFooter.tsx        Peu de pàgina (variant "inici" i variant simple)
+  Carousel.tsx          Carrusel reutilitzable (fitxa de producte i projecte)
+  NavLink.tsx           Enllaç intern entre pantalles
+  BackLink.tsx          Botó de tornar enrere (§7.13 design-system.md)
+  ArrowLabel.tsx        Etiqueta amb fletxa animada
+  ProductCard.tsx       Targeta de producte (Botiga), amb botó propi
+                        d'"Afegir a la cistella" independent del clic de
+                        navegació a la fitxa
+  QuantityStepper.tsx   Selector de quantitat (+/-) reutilitzat a la Fitxa
+                        de producte i a la Cistella
+  screens/              Les 8 pantalles: Inici, Botiga, Fitxa, Projectes,
+                        ProjecteDetall, Contacte, Seguiment i Cistella
 context/
   navigation.tsx      Estat de quina pantalla està activa
+  cart.tsx            Estat del carret (articles, quantitats, comentaris),
+                      persistit a `localStorage` — sense backend (ADR-003)
 hooks/
   useScrollThreshold.ts  Mostra/amaga la capçalera a Inici en fer scroll
   useHeroParallax.ts     Parallax del text del hero
@@ -79,6 +91,9 @@ compte de Vercel on s'ha de publicar.
 - Fotografies definitives (ara marcades com "Foto d'exemple").
 - Catàleg complet i preus confirmats (`lib/data.ts`).
 - Textos legals: NIF, condicions de venda i dret de desistiment.
-- Enrutament real per pantalla (SEO tècnic complet — `seo.md`).
+- Enrutament real per pantalla — revertir ADR-002 (`arquitectura.md`):
+  necessari abans de qualsevol treball seriós de SEO (`seo.md`).
+- Passarel·la de pagament real (Stripe i/o Bizum) a `context/cart.tsx` i
+  `Cistella.tsx` — bloquejat per la situació fiscal de la clienta (ADR-004).
 - Treure `robots: { index: false }` de `app/layout.tsx` quan es publiqui
   la versió definitiva (ara mateix el prototip no s'ha d'indexar).
