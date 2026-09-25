@@ -1273,16 +1273,23 @@ a {
 }
 
 /* ---- 7. CISTELLA: icona flotant i calaix lateral (ADR-008) ---- */
-/* Icona despenjada del menú: mateix vidre esmerilat que .site-header, però
-   com un cercle independent -- veure la simulació acordada amb la clienta
-   abans d'aplicar aquest canvi (arquitectura.md, ADR-008). */
+/* Icona despenjada del menú: mateix vidre esmerilat que .site-header, com
+   un cercle independent (arquitectura.md, ADR-008).
+   Mida i animació igualades a .site-header (ADR-010): l'alçada real de
+   .site-header (mesurada amb Playwright: 61.19px) surt de logo 2.5rem +
+   padding vertical 0.6rem*2 + vora 1px*2 -- exactament la fórmula del
+   calc() de sota, perquè els dos cercles/píndoles facin la mateixa mida
+   encara que un tingui una alçada "automàtica" (per contingut) i l'altre
+   una mida fixa. La transició i l'escalat en hover repeteixen els valors
+   de .site-header:hover en lloc dels propis d'abans (que eren més grans
+   i canviaven de color de fons, cosa que .site-header no fa). */
 .cistella-flotant {
   position: fixed;
   top: 1.25rem;
   right: 1.25rem;
   z-index: 40;
-  width: 2.85rem;
-  height: 2.85rem;
+  width: calc(2.5rem + 1.2rem + 2px);
+  height: calc(2.5rem + 1.2rem + 2px);
   border-radius: 50%;
   border: 1px solid color-mix(in srgb, var(--rosa) 65%, transparent);
   background: color-mix(in srgb, var(--paper) 74%, transparent);
@@ -1294,18 +1301,17 @@ a {
   justify-content: center;
   cursor: pointer;
   transition:
-    transform 180ms ease-out,
+    transform 180ms var(--ease-out, ease-out),
     box-shadow 180ms ease-out,
-    background-color 120ms ease-out;
+    opacity 220ms ease-out;
 }
 .cistella-flotant:hover {
-  background: var(--rosa);
-  transform: scale(1.045);
+  transform: scale(1.015);
   box-shadow: 0 14px 38px rgba(75, 64, 72, 0.2);
 }
 .cistella-flotant-icona {
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.75rem;
+  height: 1.75rem;
   display: block;
   background-color: var(--tinta);
   -webkit-mask-image: url("/assets/icona-cistella.png");
@@ -1334,18 +1340,6 @@ a {
   font-weight: 600;
   line-height: 1;
   box-shadow: 0 0 0 2px var(--paper);
-}
-@media (max-width: 640px) {
-  .cistella-flotant {
-    top: 1rem;
-    right: 1rem;
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-  .cistella-flotant-icona {
-    width: 1.1rem;
-    height: 1.1rem;
-  }
 }
 
 /* Fons semitransparent darrere el calaix; el clic hi tanca la cistella. */
