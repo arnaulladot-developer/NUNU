@@ -12,7 +12,7 @@ export function Projectes() {
       <SiteHeader />
       <div className="contenidor">
         <div className="pagina-cap">
-          <h1>Projectes</h1>
+          <h1>Esdeveniments</h1>
           <p>
             Casaments, esdeveniments i decoració. Feina real feta a mida —
             no és un catàleg de compra directa.
@@ -45,7 +45,7 @@ export function Projectes() {
         </div>
         <div style={{ textAlign: "center", margin: "3rem 0" }}>
           <NavLink to="contacte" className="boto boto-principal">
-            Explica&apos;ns el teu projecte
+            Explica&apos;ns el teu esdeveniment
           </NavLink>
         </div>
       </div>

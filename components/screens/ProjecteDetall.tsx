@@ -33,7 +33,7 @@ export function ProjecteDetall() {
         />
       </div>
       <div className="contenidor-estret projecte-detall-cos">
-        <BackLink to="projectes">Tots els projectes</BackLink>
+        <BackLink to="projectes">Tots els esdeveniments</BackLink>
         <p className="etiqueta-nota">Casament · maig 2026</p>
         <h1>Casament a can Ferrer</h1>
         <p className="projecte-descripcio">

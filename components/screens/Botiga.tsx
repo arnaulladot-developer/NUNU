@@ -13,7 +13,7 @@ export function Botiga() {
       <SiteHeader />
       <div className="contenidor">
         <div className="pagina-cap">
-          <h1>Botiga</h1>
+          <h1>Rams</h1>
           <p>
             Rams de flor seca. Enviem a tota la península en 24-48h
             laborables; Balears i Canàries, 3-5 dies.

@@ -9,7 +9,7 @@ import { Projectes } from "@/components/screens/Projectes";
 import { ProjecteDetall } from "@/components/screens/ProjecteDetall";
 import { Contacte } from "@/components/screens/Contacte";
 import { Seguiment } from "@/components/screens/Seguiment";
-import { Cistella } from "@/components/screens/Cistella";
+import { CistellaCalaix } from "@/components/CistellaCalaix";
 
 /**
  * Nomes es munta la pantalla activa (a diferència de la maqueta HTML
@@ -34,18 +34,22 @@ function ScreenRouter() {
       return <Contacte />;
     case "seguiment":
       return <Seguiment />;
-    case "cistella":
-      return <Cistella />;
     default:
       return <Inici />;
   }
 }
 
+/**
+ * La cistella ja no és un cas d'aquest switch (ADR-008, arquitectura.md):
+ * es munta sempre, per sobre de la pantalla activa, i el seu propi estat
+ * obert/tancat (context/cart.tsx) decideix si es veu.
+ */
 export default function Page() {
   return (
     <NavigationProvider>
       <CartProvider>
         <ScreenRouter />
+        <CistellaCalaix />
       </CartProvider>
     </NavigationProvider>
   );

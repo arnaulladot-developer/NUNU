@@ -23,8 +23,8 @@ export function SiteFooter({ variant = "simple" }: SiteFooterProps) {
             <p>Flor seca composta a mà al Penedès.</p>
           </div>
           <nav className="site-footer-nav" aria-label="Peu de pàgina">
-            <NavLink to="botiga">Botiga</NavLink>
-            <NavLink to="projectes">Projectes</NavLink>
+            <NavLink to="botiga">Rams</NavLink>
+            <NavLink to="projectes">Esdeveniments</NavLink>
             <NavLink to="contacte">Contacte</NavLink>
             <NavLink to="seguiment">Seguiment</NavLink>
           </nav>

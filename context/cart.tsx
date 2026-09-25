@@ -30,6 +30,13 @@ interface CartContextValue {
   buidar: () => void;
   totalArticles: number;
   totalPreu: number;
+  /** Estat del calaix lateral (ADR-008, arquitectura.md): la cistella ja
+   * no és una pantalla pròpia — és un panell que es pot obrir des de
+   * qualsevol pantalla sense navegar-hi. */
+  calaixObert: boolean;
+  obrirCalaix: () => void;
+  tancarCalaix: () => void;
+  commutarCalaix: () => void;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -58,11 +65,15 @@ function llegeixEmmagatzemat(): ArticleCistella[] {
 /**
  * Cistella de compra: viu en memòria i es persisteix a `localStorage` perquè
  * no es perdi en recarregar la pàgina, mentre no hi hagi encara backend real
- * (ADR-001, arquitectura.md — la cistella real es mourà a una comanda a
- * PostgreSQL quan es connecti la passarel·la de pagament).
+ * (ADR-003, arquitectura.md — la cistella real es mourà a una comanda a
+ * PostgreSQL quan es connecti la passarel·la de pagament, ADR-004).
+ * `calaixObert` decideix si el panell de `CistellaCalaix.tsx` es mostra —
+ * viu aquí, no al component, perquè el botó que l'obre (a `SiteHeader.tsx`)
+ * i el panell que el mostra no tenen cap relació pare-fill (ADR-008).
  */
 export function CartProvider({ children }: { children: ReactNode }) {
   const [articles, setArticles] = useState<ArticleCistella[]>([]);
+  const [calaixObert, setCalaixObert] = useState(false);
   const hidratat = useRef(false);
 
   useEffect(() => {
@@ -129,6 +140,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const buidar = useCallback(() => setArticles([]), []);
 
+  const obrirCalaix = useCallback(() => setCalaixObert(true), []);
+  const tancarCalaix = useCallback(() => setCalaixObert(false), []);
+  const commutarCalaix = useCallback(() => setCalaixObert((actual) => !actual), []);
+
   const totalArticles = useMemo(
     () => articles.reduce((suma, a) => suma + a.quantitat, 0),
     [articles],
@@ -153,8 +168,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
       buidar,
       totalArticles,
       totalPreu,
+      calaixObert,
+      obrirCalaix,
+      tancarCalaix,
+      commutarCalaix,
     }),
-    [articles, afegir, actualitzarQuantitat, actualitzarComentari, eliminar, buidar, totalArticles, totalPreu],
+    [
+      articles,
+      afegir,
+      actualitzarQuantitat,
+      actualitzarComentari,
+      eliminar,
+      buidar,
+      totalArticles,
+      totalPreu,
+      calaixObert,
+      obrirCalaix,
+      tancarCalaix,
+      commutarCalaix,
+    ],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

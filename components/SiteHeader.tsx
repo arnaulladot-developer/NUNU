@@ -8,8 +8,8 @@ import { useCart } from "@/context/cart";
 import type { ScreenId } from "@/lib/types";
 
 const ENLLAÇOS: { to: ScreenId; etiqueta: string }[] = [
-  { to: "botiga", etiqueta: "Botiga" },
-  { to: "projectes", etiqueta: "Projectes" },
+  { to: "botiga", etiqueta: "Rams" },
+  { to: "projectes", etiqueta: "Esdeveniments" },
   { to: "contacte", etiqueta: "Contacte" },
   { to: "seguiment", etiqueta: "Seguiment" },
 ];
@@ -26,7 +26,7 @@ export function SiteHeader({ revealOnScroll = false }: SiteHeaderProps) {
   const [menuObert, setMenuObert] = useState(false);
   const haBaixat = useScrollThreshold(LLINDAR_REVEAL);
   const navVisible = revealOnScroll ? haBaixat : true;
-  const { totalArticles } = useCart();
+  const { totalArticles, commutarCalaix } = useCart();
 
   const classes = [
     "site-header",
@@ -38,54 +38,62 @@ export function SiteHeader({ revealOnScroll = false }: SiteHeaderProps) {
     .join(" ");
 
   return (
-    <header className={classes}>
-      <NavLink to="inici" className="marca-nom">
-        <Image
-          src="/assets/logo.jpg"
-          alt="Nunu Flowers"
-          width={72}
-          height={72}
-        />
-      </NavLink>
-      <nav>
-        {ENLLAÇOS.map((enllaç) => (
-          <NavLink
-            key={enllaç.to}
-            to={enllaç.to}
-            onNavigate={() => setMenuObert(false)}
-          >
-            {enllaç.etiqueta}
-          </NavLink>
-        ))}
-        <NavLink
-          to="cistella"
-          className="site-header-cistella"
-          onNavigate={() => setMenuObert(false)}
-          aria-label={
-            totalArticles > 0
-              ? `Cistella, ${totalArticles} ${totalArticles === 1 ? "article" : "articles"}`
-              : "Cistella"
-          }
-        >
-          <span aria-hidden="true">Cistella</span>
-          {totalArticles > 0 && (
-            <span className="cistella-comptador" aria-hidden="true">
-              {totalArticles}
-            </span>
-          )}
+    <>
+      <header className={classes}>
+        <NavLink to="inici" className="marca-nom">
+          <Image
+            src="/assets/logo.jpg"
+            alt="Nunu Flowers"
+            width={72}
+            height={72}
+          />
         </NavLink>
-      </nav>
+        <nav>
+          {ENLLAÇOS.map((enllaç) => (
+            <NavLink
+              key={enllaç.to}
+              to={enllaç.to}
+              onNavigate={() => setMenuObert(false)}
+            >
+              {enllaç.etiqueta}
+            </NavLink>
+          ))}
+        </nav>
+        <button
+          type="button"
+          className="menu-mobil"
+          aria-expanded={menuObert}
+          aria-label="Obrir el menú"
+          onClick={() => setMenuObert((obert) => !obert)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </header>
+
+      {/* Despenjada del menú (ADR-008, arquitectura.md): la mateixa
+          píndola de vidre que la capçalera, pero com un cercle independent
+          a l'extrem dret, perquè sigui accessible encara que el menú
+          estigui amagat darrere del botó de mòbil. */}
       <button
         type="button"
-        className="menu-mobil"
-        aria-expanded={menuObert}
-        aria-label="Obrir el menú"
-        onClick={() => setMenuObert((obert) => !obert)}
+        id="boto-cistella"
+        className="cistella-flotant"
+        onClick={commutarCalaix}
+        aria-label={
+          totalArticles > 0
+            ? `Cistella, ${totalArticles} ${totalArticles === 1 ? "article" : "articles"}`
+            : "Cistella"
+        }
       >
-        <span />
-        <span />
-        <span />
+        <span className="cistella-flotant-icona" aria-hidden="true" />
+        {totalArticles > 0 && (
+          <span className="cistella-flotant-comptador" aria-hidden="true">
+            {totalArticles}
+          </span>
+        )}
       </button>
-    </header>
+    </>
   );
 }

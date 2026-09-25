@@ -1009,7 +1009,6 @@ a {
   max-width: 1400px;
   margin: 0 auto;
   padding: 7rem 1.25rem 0;
-  width: 100%;
 }
 @media (max-width: 700px) {
   .projecte-detall-hero {
@@ -1227,43 +1226,7 @@ a {
   margin-bottom: 0;
 }
 
-/* ---- 7. CISTELLA ---- */
-/* Enllaç de la cistella al menú: mateixa píndola que la resta, amb un
-   comptador petit que només apareix quan hi ha articles. */
-.site-header-cistella {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-.cistella-comptador {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.3em;
-  height: 1.3em;
-  padding: 0 0.3em;
-  border-radius: 999px;
-  background: var(--accent);
-  color: var(--paper);
-  font-size: 0.72rem;
-  font-weight: 600;
-  line-height: 1;
-}
-
-/* Fotografia de la cistella buida: mateix tractament honest que la resta
-   de fotografia d'exemple del lloc (placeholder + etiqueta), sense
-   centrar-la -- manté el mateix marge esquerre que el títol i el text en
-   comptes de convertir la pantalla buida en una composició centrada de
-   manual, que desentonaria amb la resta del lloc. */
-.cistella-buida-foto {
-  position: relative;
-  width: 100%;
-  max-width: 20rem;
-  aspect-ratio: 3 / 4;
-  margin: 0.5rem 0 2.25rem;
-}
-
-/* Selector de quantitat (fitxa de producte i cistella). */
+/* Selector de quantitat (fitxa de producte i calaix de la cistella). */
 .quantitat-control {
   display: inline-flex;
   align-items: stretch;
@@ -1312,134 +1275,269 @@ a {
   margin-bottom: 0.5rem;
 }
 
-/* Llista d'articles de la cistella. */
-.cistella-llista {
-  list-style: none;
-  margin: 2rem 0 0;
-  padding: 0;
-  border-top: 1px solid var(--rosa);
+/* ---- 7. CISTELLA: icona flotant i calaix lateral (ADR-008) ---- */
+/* Icona despenjada del menú: mateix vidre esmerilat que .site-header, però
+   com un cercle independent -- veure la simulació acordada amb la clienta
+   abans d'aplicar aquest canvi (arquitectura.md, ADR-008). */
+.cistella-flotant {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 40;
+  width: 2.85rem;
+  height: 2.85rem;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--rosa) 65%, transparent);
+  background: color-mix(in srgb, var(--paper) 74%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(16px);
+  backdrop-filter: saturate(1.4) blur(16px);
+  box-shadow: 0 10px 30px rgba(75, 64, 72, 0.14);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    transform 180ms ease-out,
+    box-shadow 180ms ease-out,
+    background-color 120ms ease-out;
 }
-.cistella-article {
-  display: grid;
-  grid-template-columns: 72px 1fr auto auto auto;
-  grid-template-areas: "foto info quantitat preu eliminar";
-  align-items: start;
-  gap: 1.25rem;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid var(--rosa);
+.cistella-flotant:hover {
+  background: var(--rosa);
+  transform: scale(1.045);
+  box-shadow: 0 14px 38px rgba(75, 64, 72, 0.2);
 }
-@media (max-width: 760px) {
-  .cistella-article {
-    grid-template-columns: 72px 1fr auto;
-    grid-template-areas:
-      "foto info eliminar"
-      "quantitat quantitat preu";
-    row-gap: 1rem;
+.cistella-flotant-icona {
+  width: 1.3rem;
+  height: 1.3rem;
+  display: block;
+  background-color: var(--tinta);
+  -webkit-mask-image: url("/assets/icona-cistella.png");
+  mask-image: url("/assets/icona-cistella.png");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+.cistella-flotant-comptador {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.2em;
+  height: 1.2em;
+  padding: 0 0.3em;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--paper);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow: 0 0 0 2px var(--paper);
+}
+@media (max-width: 640px) {
+  .cistella-flotant {
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .cistella-flotant-icona {
+    width: 1.1rem;
+    height: 1.1rem;
   }
 }
-.cistella-article-foto {
-  grid-area: foto;
-  width: 72px;
-  height: 90px;
-  flex-shrink: 0;
+
+/* Fons semitransparent darrere el calaix; el clic hi tanca la cistella. */
+.calaix-fons {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background: rgba(43, 34, 38, 0.38);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease-out;
 }
-.cistella-article-info {
-  grid-area: info;
-}
-.cistella-article-info .producte-nom {
-  margin: 0 0 0.2rem;
-  font-size: 1.1rem;
-}
-.cistella-article-info .producte-composicio {
-  margin: 0 0 0.75rem;
-}
-.cistella-article-comentari {
-  margin: 0;
-  max-width: 32ch;
-}
-.cistella-article-comentari label {
-  font-size: 0.78rem;
-  color: var(--pedra);
-  margin-bottom: 0.3rem;
-}
-.cistella-article-comentari input {
-  font-size: 0.9rem;
-  padding: 0.5rem 0.6rem;
+.calaix-fons--visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-.cistella-article-quantitat {
-  grid-area: quantitat;
+/* Calaix lateral: mateix contingut que abans tenia la pantalla Cistella,
+   ara en un panell que llisca des de la dreta sense abandonar la pantalla
+   on estava l'usuari. */
+.calaix-cistella {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 46;
+  width: min(24rem, 100%);
+  background: var(--paper);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
+  box-shadow: -14px 0 32px rgba(43, 34, 38, 0.18);
+  transform: translateX(100%);
+  transition: transform 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-.cistella-etiqueta-mobil {
-  display: none;
-  font-size: 0.78rem;
-  color: var(--pedra);
+.calaix-cistella--obert {
+  transform: translateX(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .calaix-cistella,
+  .calaix-fons {
+    transition: none;
+  }
 }
 
-.cistella-article-preu {
-  grid-area: preu;
+.calaix-capcalera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--rosa);
+  flex-shrink: 0;
+}
+.calaix-capcalera h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.4rem;
+  margin: 0;
+}
+.calaix-tancar {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 50%;
+  background: var(--rosa);
+  color: var(--tinta);
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.calaix-cos {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem;
+}
+.calaix-buit,
+.calaix-confirmacio {
+  padding-top: 0.5rem;
+}
+.calaix-buit p,
+.calaix-confirmacio p {
+  color: var(--pedra);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin: 0 0 1.25rem;
+}
+
+.calaix-llista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.calaix-article {
+  display: flex;
+  gap: 0.85rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--rosa);
+}
+.calaix-article:first-child {
+  padding-top: 0;
+}
+.calaix-article-foto {
+  position: relative;
+  width: 64px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.calaix-article-info {
+  flex: 1;
+  min-width: 0;
+}
+.calaix-article-capcalera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.calaix-article-capcalera .producte-nom {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+.calaix-eliminar {
+  border: none;
+  background: none;
+  color: var(--pedra);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.15rem;
+  flex-shrink: 0;
+  transition: color 120ms ease-out;
+}
+.calaix-eliminar:hover {
+  color: var(--accent);
+}
+.calaix-article-camp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+.calaix-article-preu {
   font-family: var(--font-text);
   font-weight: 600;
   color: var(--accent);
   white-space: nowrap;
-  align-self: center;
 }
-
-.cistella-eliminar {
-  grid-area: eliminar;
-  border: none;
-  background: none;
+.calaix-article-comentari {
+  margin: 0;
+}
+.calaix-article-comentari label {
+  font-size: 0.74rem;
   color: var(--pedra);
-  font-size: 1.1rem;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0.4rem;
-  align-self: center;
-  transition: color 120ms ease-out;
+  margin-bottom: 0.25rem;
 }
-.cistella-eliminar:hover {
-  color: var(--accent);
+.calaix-article-comentari input {
+  font-size: 0.85rem;
+  padding: 0.45rem 0.55rem;
+  width: 100%;
 }
 
-@media (max-width: 760px) {
-  .cistella-article-quantitat {
-    align-items: flex-start;
-  }
-  .cistella-etiqueta-mobil {
-    display: block;
-  }
-  .cistella-article-preu {
-    align-self: end;
-  }
+.calaix-resum {
+  flex-shrink: 0;
+  padding: 1.1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--rosa);
 }
-
-.cistella-resum {
-  max-width: 26rem;
-  margin: 2.5rem 0 4rem auto;
-}
-@media (max-width: 560px) {
-  .cistella-resum {
-    margin: 2.5rem auto 4rem;
-  }
-}
-.cistella-resum-linia {
+.calaix-resum-linia {
   display: flex;
   justify-content: space-between;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--pedra);
-  padding: 0.4rem 0;
+  padding: 0.3rem 0;
 }
-.cistella-resum-total {
+.calaix-resum-total {
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 500;
   color: var(--tinta);
   border-top: 1px solid var(--rosa);
-  margin-top: 0.4rem;
-  padding-top: 1rem;
-  margin-bottom: 1.5rem;
+  margin-top: 0.3rem;
+  padding-top: 0.85rem;
+  margin-bottom: 0.9rem;
+}
+.calaix-nota {
+  font-size: 0.76rem;
+  color: var(--pedra);
+  margin: 0 0 1rem;
 }
