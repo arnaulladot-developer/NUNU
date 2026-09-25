@@ -101,14 +101,11 @@ a {
    .placeholder -- el .placeholder del hero és més gran que la finestra
    visible (inset:-6%, per l'efecte de zoom lent), i una etiqueta
    posicionada dins seu quedava fora de la pantalla (bug corregit). */
-.hero .badge-exemple {
-  background: rgba(251, 246, 242, 0.88);
-  left: auto;
-  right: 0.75rem;
-  bottom: auto;
-  top: 1.5rem;
-}
-/* A dalt en comptes de a baix -- a baix hi ha els punts del carrusel. */
+/* La badge de foto d'exemple de la portada (.hero) es va treure expressament
+   (ADR-009, arquitectura.md): a top:1.5rem/right:.75rem queda just sota la
+   icona flotant de la cistella (top:1.25rem/right:1.25rem, ADR-008) i s'hi
+   xoca visualment. Les altres dues fotos d'Inici i la resta del lloc
+   mantenen la badge sense canvis. */
 .carrusel-item .badge-exemple {
   left: 0.75rem;
   top: 0.75rem;

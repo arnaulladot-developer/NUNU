@@ -25,7 +25,6 @@ export function Inici() {
             priority
           />
         </div>
-        <span className="badge-exemple">Foto d&apos;exemple — pendent de confirmar</span>
         <div className="hero-contingut" ref={heroRef}>
           <h1>Nunu Flowers</h1>
           <p>
