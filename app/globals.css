@@ -1309,6 +1309,20 @@ a {
   transform: scale(1.015);
   box-shadow: 0 14px 38px rgba(75, 64, 72, 0.2);
 }
+/* Aparició sincronitzada amb .site-header.header--reveal (ADR-011): a
+   Inici, amagada mentre s'és a dalt de tot i apareix en baixar "una mica",
+   amb el mateix llindar de scroll i el mateix moviment (nomes sense la
+   translateX(-50%), perquè la cistella no està centrada horitzontalment). */
+.cistella-flotant.flotant--reveal {
+  opacity: 0;
+  transform: translateY(-14px);
+  pointer-events: none;
+}
+.cistella-flotant.flotant--reveal.nav-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
 .cistella-flotant-icona {
   width: 1.75rem;
   height: 1.75rem;

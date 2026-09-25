@@ -37,6 +37,14 @@ export function SiteHeader({ revealOnScroll = false }: SiteHeaderProps) {
     .filter(Boolean)
     .join(" ");
 
+  const classesCistella = [
+    "cistella-flotant",
+    revealOnScroll && "flotant--reveal",
+    navVisible && "nav-visible",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <>
       <header className={classes}>
@@ -75,11 +83,14 @@ export function SiteHeader({ revealOnScroll = false }: SiteHeaderProps) {
       {/* Despenjada del menú (ADR-008, arquitectura.md): la mateixa
           píndola de vidre que la capçalera, pero com un cercle independent
           a l'extrem dret, perquè sigui accessible encara que el menú
-          estigui amagat darrere del botó de mòbil. */}
+          estigui amagat darrere del botó de mòbil. Aparició sincronitzada
+          amb el menú (ADR-011): a Inici, amagada fins que es baixa "una
+          mica", exactament amb el mateix llindar i les mateixes classes
+          que `.site-header`. */}
       <button
         type="button"
         id="boto-cistella"
-        className="cistella-flotant"
+        className={classesCistella}
         onClick={commutarCalaix}
         aria-label={
           totalArticles > 0
