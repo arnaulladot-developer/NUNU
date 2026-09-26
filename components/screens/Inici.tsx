@@ -21,7 +21,7 @@ export function Inici() {
             alt="Fotografia d'exemple facilitada pel client — ram sobre esglaons de pedra"
             fill
             sizes="100vw"
-            style={{ objectFit: "cover", objectPosition: "70% 45%" }}
+            style={{ objectFit: "cover" }}
             priority
           />
         </div>

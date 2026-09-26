@@ -223,8 +223,18 @@ a {
     display: none;
     position: absolute;
     top: calc(100% + 0.6rem);
-    left: 0;
     right: 0;
+    /* El marc ha d'ajustar-se al text més llarg ("Esdeveniments"), no a
+       l'amplada de la píndola tancada (logo + botó): amb `left:0; right:0`
+       el desplegable quedava tan estret com la píndola i els enllaços més
+       llargs sortien del marc en lloc de trencar de línia (les paraules
+       no tenen cap espai on partir-se). `width: max-content` el fa créixer
+       cap a l'esquerra fins al que calgui, ancorat per la dreta sota el
+       botó de menú; `max-width` evita que arribi a tocar la vora esquerra
+       de la pantalla en un mòbil molt estret. */
+    left: auto;
+    width: max-content;
+    max-width: calc(100vw - 2.5rem);
     flex-direction: column;
     gap: 0.15rem;
     padding: 0.75rem;
@@ -237,6 +247,7 @@ a {
   }
   .site-header nav a {
     padding: 0.7rem 1rem;
+    white-space: nowrap;
   }
   .site-header.menu-obert nav {
     display: flex;
@@ -347,8 +358,16 @@ a {
   inset: -6%;
   animation: heroZoom 22s ease-in-out infinite alternate;
 }
+/* Centre del ram dins de foto-5.jpg (1400x933), mesurat sobre la imatge
+   real: el cap del ram hi queda entre el 30% i el 68% de l'amplada. Amb
+   `object-fit: cover`, el mòbil (capçalera molt més alta que ampla) només
+   ensenya un 30% de l'amplada de la foto -- amb el 70% d'abans, la
+   finestra visible queia gairebé tota a la dreta del ram (nomes s'hi veia
+   un tros del llaç). Es fixa aquí, en CSS, i no `inline` a Inici.tsx,
+   perquè un `style` inline sempre guanya a una regla de fulla d'estils i
+   feia que aquesta mateixa regla no tingués mai efecte. */
 .hero .placeholder img {
-  object-position: 70% 45%;
+  object-position: 50% 40%;
 }
 .hero::before {
   content: "";
