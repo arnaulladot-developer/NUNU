@@ -1002,7 +1002,13 @@ a {
 }
 
 /* ---- 4b. PROJECTE — DETALL ---- */
+/* width:100% obligatori (ADR-006, arquitectura.md): és fill directe de
+   <section>, que és un contenidor flex en columna, i un fill amb
+   `margin: 0 auto` per centrar-se no s'hi estira per si sol -- es queda
+   al seu "max-content width" (aquí, uns 96px, la mida del contingut
+   posicionat en absolut del carrusel) enlloc d'omplir el `max-width`. */
 .projecte-detall-hero {
+  width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding: 7rem 1.25rem 0;
