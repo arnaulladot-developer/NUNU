@@ -383,12 +383,20 @@ a {
   );
 }
 @media (max-width: 760px) {
+  .hero {
+    align-items: flex-end;
+  }
+  /* El difuminat deixa de ser una banda vertical (d'esquerra a dreta, tota
+     l'alçada) i es concentra només a la cantonada on ara viu el text
+     (ADR-013): un degradat radial ancorat a baix a l'esquerra, on hi ha
+     `.hero-contingut`, en lloc de tapar mig ram amb una banda que ja no
+     fa falta perquè el text no hi és a sobre. */
   .hero::before {
-    background: linear-gradient(
-      90deg,
+    background: radial-gradient(
+      ellipse 130% 80% at 0% 100%,
       var(--paper) 0%,
-      var(--paper) 46%,
-      transparent 88%
+      var(--paper) 28%,
+      transparent 68%
     );
   }
 }
@@ -411,6 +419,14 @@ a {
 @media (max-width: 760px) {
   .hero-contingut {
     max-width: 100%;
+    /* Marge respecte la vora inferior real de la pantalla (ADR-013): el
+       text ara s'ancora a baix (`.hero { align-items: flex-end }`) i,
+       sense aquest respir, el botó secundari quedava enganxat al cantell
+       exacte del viewport. S'afegeix aquí, no a la regla base de dalt,
+       perquè el seu `padding: 0 2rem` és un abreujat que reinicia els
+       quatre costats i, com que aquesta regla és posterior en el fitxer,
+       guanyaria sobre qualsevol padding-bottom fixat abans. */
+    padding-bottom: 3rem;
   }
 }
 .hero-panel {
