@@ -390,13 +390,17 @@ a {
      l'alçada) i es concentra només a la cantonada on ara viu el text
      (ADR-013): un degradat radial ancorat a baix a l'esquerra, on hi ha
      `.hero-contingut`, en lloc de tapar mig ram amb una banda que ja no
-     fa falta perquè el text no hi és a sobre. */
+     fa falta perquè el text no hi és a sobre.
+     L'el·lipse és ampla i baixa (ADR-015), no rodona: ha de cobrir sencera
+     la franja de text —que arriba fins a la vora dreta— sense pujar fins
+     al ram. Les mides surten de resoldre la distància normalitzada dels
+     extrems del text respecte l'ancoratge, no de provar valors a ull. */
   .hero::before {
     background: radial-gradient(
-      ellipse 130% 80% at 0% 100%,
+      ellipse 270% 52% at 0% 100%,
       var(--paper) 0%,
-      var(--paper) 28%,
-      transparent 68%
+      var(--paper) 75%,
+      transparent 100%
     );
   }
 }
@@ -467,6 +471,26 @@ a {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+/* Portada en mòbil: el text es fa una mica més petit perquè càpiga sencer
+   dins del difuminat de la cantonada (ADR-015). Va aquí, després de les
+   regles base de `.hero-contingut h1` i `p`, i no al bloc mòbil de més
+   amunt: entre regles de la mateixa especificitat guanya la darrera del
+   fitxer, no la que porta `@media` (la mateixa lliçó de l'ADR-013). */
+@media (max-width: 760px) {
+  .hero-contingut h1 {
+    font-size: clamp(1.75rem, 7.5vw, 2.25rem);
+    letter-spacing: 0.07em;
+  }
+  .hero-contingut p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .hero-contingut .boto {
+    padding: 0.7rem 1.35rem;
+    font-size: 0.88rem;
+  }
 }
 
 /* Botó en píndola (Mercury: "Primary CTA Button" / "Ghost Outline Button"). */
