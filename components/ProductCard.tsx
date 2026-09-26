@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { NavLink } from "@/components/NavLink";
 import { useCart } from "@/context/cart";
+import { useBotiga } from "@/context/botiga";
 import type { Producte } from "@/lib/data";
 
 const DURADA_CONFIRMACIO_MS = 1600;
@@ -20,6 +21,8 @@ interface ProductCardProps {
  */
 export function ProductCard({ producte }: ProductCardProps) {
   const { afegir } = useCart();
+  const { esExhaurit } = useBotiga();
+  const exhaurit = esExhaurit(producte.id);
   const [confirmat, setConfirmat] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -30,6 +33,7 @@ export function ProductCard({ producte }: ProductCardProps) {
   }, []);
 
   function handleAfegir() {
+    if (exhaurit) return;
     afegir(producte.id, 1);
     setConfirmat(true);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -37,7 +41,7 @@ export function ProductCard({ producte }: ProductCardProps) {
   }
 
   return (
-    <div className="producte-targeta">
+    <div className={`producte-targeta${exhaurit ? " producte-targeta--exhaurit" : ""}`}>
       <NavLink to="fitxa" className="producte-targeta-link">
         <div className="placeholder">
           <Image
@@ -48,6 +52,7 @@ export function ProductCard({ producte }: ProductCardProps) {
             style={{ objectFit: "cover" }}
           />
           <span className="badge-exemple">Foto d&apos;exemple</span>
+          {exhaurit && <span className="badge-exhaurit">Exhaurit</span>}
         </div>
         <p className="producte-nom">{producte.nom}</p>
         <p className="producte-composicio">{producte.composicio}</p>
@@ -57,8 +62,9 @@ export function ProductCard({ producte }: ProductCardProps) {
         type="button"
         className="boto boto-principal producte-afegir"
         onClick={handleAfegir}
+        disabled={exhaurit}
       >
-        {confirmat ? "Afegit ✓" : "Afegir a la cistella"}
+        {exhaurit ? "Exhaurit" : confirmat ? "Afegit ✓" : "Afegir a la cistella"}
       </button>
     </div>
   );

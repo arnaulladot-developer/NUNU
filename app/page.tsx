@@ -2,6 +2,7 @@
 
 import { NavigationProvider, useNavigation } from "@/context/navigation";
 import { CartProvider } from "@/context/cart";
+import { BotigaProvider, useBotiga } from "@/context/botiga";
 import { Inici } from "@/components/screens/Inici";
 import { Botiga } from "@/components/screens/Botiga";
 import { Fitxa } from "@/components/screens/Fitxa";
@@ -9,6 +10,7 @@ import { Projectes } from "@/components/screens/Projectes";
 import { ProjecteDetall } from "@/components/screens/ProjecteDetall";
 import { Contacte } from "@/components/screens/Contacte";
 import { Seguiment } from "@/components/screens/Seguiment";
+import { Admin } from "@/components/screens/Admin";
 import { CistellaCalaix } from "@/components/CistellaCalaix";
 
 /**
@@ -18,6 +20,7 @@ import { CistellaCalaix } from "@/components/CistellaCalaix";
  */
 function ScreenRouter() {
   const { screen } = useNavigation();
+  const { sessioAdmin } = useBotiga();
 
   switch (screen) {
     case "inici":
@@ -34,6 +37,11 @@ function ScreenRouter() {
       return <Contacte />;
     case "seguiment":
       return <Seguiment />;
+    case "admin":
+      // Sense sessió oberta no es pinta el panell (ADR-014). No és una
+      // mesura de seguretat -- la comprovació és al navegador -- sinó la
+      // garantia que recarregar la pàgina no hi deixi ningú a dins.
+      return sessioAdmin ? <Admin /> : <Seguiment />;
     default:
       return <Inici />;
   }
@@ -47,10 +55,12 @@ function ScreenRouter() {
 export default function Page() {
   return (
     <NavigationProvider>
-      <CartProvider>
-        <ScreenRouter />
-        <CistellaCalaix />
-      </CartProvider>
+      <BotigaProvider>
+        <CartProvider>
+          <ScreenRouter />
+          <CistellaCalaix />
+        </CartProvider>
+      </BotigaProvider>
     </NavigationProvider>
   );
 }

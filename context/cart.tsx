@@ -6,7 +6,6 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -74,7 +73,17 @@ function llegeixEmmagatzemat(): ArticleCistella[] {
 export function CartProvider({ children }: { children: ReactNode }) {
   const [articles, setArticles] = useState<ArticleCistella[]>([]);
   const [calaixObert, setCalaixObert] = useState(false);
-  const hidratat = useRef(false);
+  /**
+   * Ha de ser estat, no `useRef`: amb un ref, l'efecte d'escriptura de sota
+   * s'executava dins del mateix commit inicial, just després d'aquest, quan
+   * `articles` encara era la llista buida però el senyal ja estava a `true`
+   * — i desava `[]` a sobre del que hi havia guardat. La cistella no ha
+   * arribat mai a sobreviure a una recàrrega per aquest motiu (ADR-014, on
+   * es va trobar el mateix error al context nou de botiga). Amb estat,
+   * l'efecte torna a executar-se després del render ja hidratat i escriu
+   * el contingut bo.
+   */
+  const [hidratat, setHidratat] = useState(false);
 
   useEffect(() => {
     // Excepció justificada, no oblit: `localStorage` no existeix en SSR, així
@@ -85,17 +94,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     // contínua perquè `localStorage` no notifica canvis de la mateixa pestanya.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setArticles(llegeixEmmagatzemat());
-    hidratat.current = true;
+    setHidratat(true);
   }, []);
 
   useEffect(() => {
-    if (!hidratat.current) return;
+    if (!hidratat) return;
     try {
       window.localStorage.setItem(CLAU_EMMAGATZEMATGE, JSON.stringify(articles));
     } catch {
       // Res a fer si l'emmagatzematge no accepta escriptura.
     }
-  }, [articles]);
+  }, [articles, hidratat]);
 
   const afegir = useCallback((productId: string, quantitat = 1) => {
     setArticles((actuals) => {

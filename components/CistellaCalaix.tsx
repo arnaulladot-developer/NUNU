@@ -5,6 +5,7 @@ import Image from "next/image";
 import { NavLink } from "@/components/NavLink";
 import { QuantityStepper } from "@/components/QuantityStepper";
 import { useCart } from "@/context/cart";
+import { useBotiga } from "@/context/botiga";
 import { getProducteById } from "@/lib/data";
 
 /**
@@ -33,6 +34,10 @@ export function CistellaCalaix() {
     calaixObert,
     tancarCalaix,
   } = useCart();
+  const { esExhaurit } = useBotiga();
+  // Un ram es pot exhaurir (ADR-014) quan ja és a la cistella d'algú: cal
+  // aturar-ho abans de confirmar, no només a la botiga.
+  const articlesExhaurits = articles.filter((article) => esExhaurit(article.productId));
   const [comandaConfirmada, setComandaConfirmada] = useState(false);
   const panellRef = useRef<HTMLDivElement | null>(null);
   const tancarBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -59,6 +64,7 @@ export function CistellaCalaix() {
   }, [calaixObert, tancarCalaix]);
 
   function handleFinalitzar() {
+    if (articlesExhaurits.length > 0) return;
     setComandaConfirmada(true);
     buidar();
     if (panellRef.current) panellRef.current.scrollTop = 0;
@@ -151,7 +157,12 @@ export function CistellaCalaix() {
                       </div>
                       <div className="calaix-article-info">
                         <div className="calaix-article-capcalera">
-                          <p className="producte-nom">{producte.nom}</p>
+                          <p className="producte-nom">
+                            {producte.nom}
+                            {esExhaurit(article.productId) && (
+                              <span className="calaix-exhaurit">Exhaurit</span>
+                            )}
+                          </p>
                           <button
                             type="button"
                             className="calaix-eliminar"
@@ -205,6 +216,14 @@ export function CistellaCalaix() {
                 <span>Total</span>
                 <span>{totalPreu.toFixed(2)} €</span>
               </div>
+              {articlesExhaurits.length > 0 && (
+                <p className="calaix-avis">
+                  {articlesExhaurits.length === 1
+                    ? "Un dels rams s'ha exhaurit mentre era a la cistella."
+                    : "Alguns rams s'han exhaurit mentre eren a la cistella."}{" "}
+                  Treu-lo de la cistella per poder finalitzar la comanda.
+                </p>
+              )}
               <p className="calaix-nota">
                 Enviament gratuït a partir de 45 €; per sota, 4,90 €. Es
                 calcula en confirmar la comanda.
@@ -214,6 +233,7 @@ export function CistellaCalaix() {
                 className="boto boto-principal"
                 style={{ width: "100%" }}
                 onClick={handleFinalitzar}
+                disabled={articlesExhaurits.length > 0}
                 tabIndex={calaixObert ? 0 : -1}
               >
                 Finalitzar comanda

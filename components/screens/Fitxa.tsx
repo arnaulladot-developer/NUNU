@@ -7,6 +7,7 @@ import { BackLink } from "@/components/BackLink";
 import { Carousel, type CarouselImage } from "@/components/Carousel";
 import { QuantityStepper } from "@/components/QuantityStepper";
 import { useCart } from "@/context/cart";
+import { useBotiga } from "@/context/botiga";
 
 const FOTOS_FITXA: CarouselImage[] = [
   {
@@ -27,10 +28,13 @@ const PRODUCT_ID = "vesc";
  */
 export function Fitxa() {
   const { afegir } = useCart();
+  const { esExhaurit } = useBotiga();
+  const exhaurit = esExhaurit(PRODUCT_ID);
   const [quantitat, setQuantitat] = useState(1);
   const [confirmat, setConfirmat] = useState(false);
 
   function handleAfegir() {
+    if (exhaurit) return;
     afegir(PRODUCT_ID, quantitat);
     setConfirmat(true);
     window.setTimeout(() => setConfirmat(false), 1800);
@@ -94,6 +98,12 @@ export function Fitxa() {
                 sota, 4,90 €.
               </p>
             </div>
+            {exhaurit && (
+              <p className="fitxa-exhaurit">
+                Aquest ram està exhaurit ara mateix. Escriu-nos per WhatsApp
+                (+34 611 22 33 44) i et direm quan el tornarem a tenir.
+              </p>
+            )}
             <div className="fitxa-quantitat">
               <label htmlFor="fitxa-quantitat">Quantitat</label>
               <QuantityStepper id="fitxa-quantitat" value={quantitat} onChange={setQuantitat} />
@@ -103,8 +113,13 @@ export function Fitxa() {
               className="boto boto-principal"
               style={{ width: "100%" }}
               onClick={handleAfegir}
+              disabled={exhaurit}
             >
-              {confirmat ? "Afegit a la cistella ✓" : "Afegir a la cistella"}
+              {exhaurit
+                ? "Exhaurit"
+                : confirmat
+                  ? "Afegit a la cistella ✓"
+                  : "Afegir a la cistella"}
             </button>
           </div>
         </div>

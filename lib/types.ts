@@ -15,4 +15,8 @@ export type ScreenId =
   | "projectes"
   | "projecte-detall"
   | "contacte"
-  | "seguiment";
+  | "seguiment"
+  /** Panell intern de la propietària (ADR-014). No surt a cap menú: només
+   * s'hi arriba introduint les credencials de demostració al formulari de
+   * Seguiment. No és una pantalla pública i no s'ha d'indexar mai. */
+  | "admin";

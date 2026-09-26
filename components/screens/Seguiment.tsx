@@ -4,17 +4,42 @@ import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { useNavigation } from "@/context/navigation";
+import { useBotiga } from "@/context/botiga";
+
+/** Credencials de demostració del panell intern (ADR-014). No són cap
+ * mesura de seguretat: viuen al codi que s'envia al navegador i qualsevol
+ * les pot llegir. Serveixen per ensenyar el panell a la clienta i prou —
+ * abans de producció, autenticació real al servidor. */
+const CORREU_PROPIETARIA = "hola@nunuflowers.com";
+const CLAU_PROPIETARIA = "nunu-flowers";
 
 /**
  * Demostració purament de client, sense backend real (mateix criteri que
  * el formulari de Contacte): en enviar el formulari de cerca s'amaga i
- * apareix un resultat ja preparat.
+ * apareix un resultat ja preparat. L'excepció és la combinació de
+ * credencials de la propietària, que porta al panell intern (ADR-014).
  */
 export function Seguiment() {
   const [mostraResultat, setMostraResultat] = useState(false);
+  const [comanda, setComanda] = useState("");
+  const [correu, setCorreu] = useState("");
+  const { goTo } = useNavigation();
+  const { obrirSessioAdmin } = useBotiga();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const esPropietaria =
+      correu.trim().toLowerCase() === CORREU_PROPIETARIA &&
+      comanda.trim().toLowerCase() === CLAU_PROPIETARIA;
+
+    if (esPropietaria) {
+      obrirSessioAdmin();
+      goTo("admin");
+      return;
+    }
+
     setMostraResultat(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -59,6 +84,8 @@ export function Seguiment() {
                       id="seg-comanda"
                       name="seg-comanda"
                       placeholder="Per exemple, NF-8K2P91Q"
+                      value={comanda}
+                      onChange={(event) => setComanda(event.target.value)}
                       required
                     />
                   </div>
@@ -71,6 +98,8 @@ export function Seguiment() {
                       id="seg-correu"
                       name="seg-correu"
                       placeholder="nom@exemple.cat"
+                      value={correu}
+                      onChange={(event) => setCorreu(event.target.value)}
                       required
                     />
                   </div>
