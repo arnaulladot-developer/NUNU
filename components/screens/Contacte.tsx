@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { CONTACTE } from "@/lib/data";
 
 /**
  * Formulari de demostració: sense backend real encara (ADR pendent per a
@@ -41,7 +42,10 @@ export function Contacte() {
                 Gràcies! La Núria revisa els encàrrecs cada dia i et respon
                 al correu que ens has deixat en menys de 24 hores laborables.
               </p>
-              <p>Qualsevol dubte mentrestant, escriu-nos per WhatsApp: +34 611 22 33 44.</p>
+              <p>
+                Qualsevol dubte mentrestant, escriu-nos per WhatsApp:{" "}
+                <a href={CONTACTE.whatsappHref}>{CONTACTE.telefon}</a>.
+              </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
@@ -98,12 +102,24 @@ export function Contacte() {
           <div className="contacte-info">
             <h2>També ens trobes a</h2>
             <dl>
-              <dt>WhatsApp</dt>
-              <dd>+34 611 22 33 44</dd>
+              <dt>Telèfon i WhatsApp</dt>
+              <dd>
+                <a href={CONTACTE.whatsappHref}>{CONTACTE.telefon}</a>
+              </dd>
               <dt>Correu</dt>
-              <dd>hola@nunuflowers.com</dd>
+              <dd>
+                <a href={`mailto:${CONTACTE.correu}`}>{CONTACTE.correu}</a>
+              </dd>
               <dt>Instagram</dt>
-              <dd>@nunu__flowers</dd>
+              <dd>
+                <a
+                  href={CONTACTE.instagramHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {CONTACTE.instagram}
+                </a>
+              </dd>
             </dl>
             <p className="contacte-nota">
               Botiga exclusivament en línia — sense local físic. Enviem a tot

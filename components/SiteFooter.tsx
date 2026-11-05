@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { NavLink } from "@/components/NavLink";
+import { CONTACTE } from "@/lib/data";
 
 interface SiteFooterProps {
   /** "inici" fa servir la graella a tres columnes; la resta, la barra simple. */
@@ -23,20 +24,21 @@ export function SiteFooter({ variant = "simple" }: SiteFooterProps) {
             <p>Flor seca composta a mà al Penedès.</p>
           </div>
           <nav className="site-footer-nav" aria-label="Peu de pàgina">
-            <NavLink to="botiga">Rams</NavLink>
-            <NavLink to="projectes">Esdeveniments</NavLink>
+            <NavLink to="botiga">Flors</NavLink>
+            <NavLink to="projectes">Ocasions</NavLink>
+            <NavLink to="fires">Fires</NavLink>
             <NavLink to="contacte">Contacte</NavLink>
-            <NavLink to="seguiment">Seguiment</NavLink>
+            <NavLink to="seguiment">Seguiment de la comanda</NavLink>
           </nav>
           <div className="site-footer-contacte">
-            <a href="mailto:hola@nunuflowers.com">hola@nunuflowers.com</a>
-            <a href="tel:+34611223344">+34 611 22 33 44</a>
+            <a href={`mailto:${CONTACTE.correu}`}>{CONTACTE.correu}</a>
+            <a href={CONTACTE.telefonHref}>{CONTACTE.telefon}</a>
             <a
-              href="https://instagram.com/nunu__flowers"
+              href={CONTACTE.instagramHref}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Instagram @nunu__flowers
+              Instagram {CONTACTE.instagram}
             </a>
           </div>
         </div>
@@ -54,7 +56,9 @@ export function SiteFooter({ variant = "simple" }: SiteFooterProps) {
   return (
     <footer className="site-footer">
       <span>© Nunu Flowers — Núria Roura Ortega</span>
-      <span>hola@nunuflowers.com · +34 611 22 33 44 · Instagram @nunu__flowers</span>
+      <span>
+        {CONTACTE.correu} · {CONTACTE.telefon} · Instagram {CONTACTE.instagram}
+      </span>
     </footer>
   );
 }

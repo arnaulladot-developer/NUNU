@@ -1,12 +1,24 @@
 :root {
   color-scheme: light;
-  --paper: #fbf6f2;
-  --rosa: #f0d0e0;
-  --tinta: #4b4048;
-  --accent: #a8456f;
-  --pedra: #665a5e;
+  /* Paleta mesurada de la capçalera de referència (disseny inici borrador):
+     fons Paper i verd Bosc exactes dels píxels; Salvia és el to del menú
+     de la referència (#6F8684), que sobre Paper només arriba a 3,55:1,
+     així que el text petit fa servir Pedra (4,88:1) i Salvia queda per a
+     línies i detalls decoratius. */
+  --paper: #f6f5ee;
+  --salvia-clar: #e3e8e0;
+  --salvia: #6f8684;
+  --pedra: #56706e;
+  --accent: #416260;
+  --tinta: #2f3f3e;
   --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-text: "Work Sans", system-ui, sans-serif;
+  --font-text: "Mulish", system-ui, sans-serif;
+  --alcada-capcalera: 8.4rem;
+}
+@media (max-width: 900px) {
+  :root {
+    --alcada-capcalera: 4.5rem;
+  }
 }
 * {
   box-sizing: border-box;
@@ -60,8 +72,8 @@ a {
   overflow: hidden;
   background: repeating-linear-gradient(
     135deg,
-    var(--rosa),
-    var(--rosa) 10px,
+    var(--salvia-clar),
+    var(--salvia-clar) 10px,
     #d7d7c8 10px,
     #d7d7c8 11px
   );
@@ -87,7 +99,7 @@ a {
   left: 0.75rem;
   bottom: 0.75rem;
   z-index: 2;
-  background: var(--rosa);
+  background: var(--salvia-clar);
   color: var(--tinta);
   font-family: var(--font-text);
   font-size: 0.7rem;
@@ -112,148 +124,282 @@ a {
   bottom: auto;
 }
 
-/* ---- capçalera del lloc: rectangle flotant amb cantons arrodonits i vidre
-   esmerilat, centrat i separat de la vora superior (comuna a totes les
-   pantalles). El "vidre" -- fons translúcid + desenfocament -- ve del
-   mateix mecanisme que ja fem servir a Terrer, aplicat ara de forma
-   permanent en comptes de nomes en fer scroll. */
+/* ---- capçalera del lloc (la de la referència) ----
+   Barra plana a tota l'amplada sobre Paper, sense vidre ni ombra: logo
+   centrat, eines a la dreta (idioma, compte, cistella) i, sota, el menú
+   en majúscules centrat. Scrolla amb la pàgina. */
 .site-header {
-  position: fixed;
-  top: 1.25rem;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
   z-index: 40;
-  display: flex;
+  background: var(--paper);
+  color: var(--accent);
+  padding: 0.75rem 2rem 0;
+}
+.capcalera-fila {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 1.75rem;
-  padding: 0.6rem 0.75rem 0.6rem 1.25rem;
-  border-radius: 28px;
-  max-width: calc(100% - 2.5rem);
-  background: color-mix(in srgb, var(--paper) 74%, transparent);
-  -webkit-backdrop-filter: saturate(1.4) blur(16px);
-  backdrop-filter: saturate(1.4) blur(16px);
-  border: 1px solid color-mix(in srgb, var(--rosa) 65%, transparent);
-  box-shadow: 0 10px 30px rgba(75, 64, 72, 0.14);
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  transition:
-    transform 180ms var(--ease-out, ease-out),
-    box-shadow 180ms ease-out,
-    opacity 220ms ease-out;
-}
-.site-header:hover {
-  transform: translateX(-50%) scale(1.015);
-  box-shadow: 0 14px 38px rgba(75, 64, 72, 0.2);
-}
-.site-header nav {
-  display: flex;
-  gap: 0.25rem;
-  font-family: var(--font-text);
-  font-size: 1.05rem;
-}
-/* Enllaç de navegació en píndola (Mercury: "Navigation Pill Link"), recolorit
-   amb els tons de NUNU en comptes del blau cobalt de la referència. */
-.site-header nav a {
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-  transition:
-    background-color 120ms ease-out,
-    color 120ms ease-out;
-}
-.site-header nav a:hover {
-  background: var(--rosa);
+  max-width: 1400px;
+  margin: 0 auto;
 }
 .marca-nom {
   text-decoration: none;
-  letter-spacing: 0.01em;
   display: block;
+  grid-column: 2;
 }
 .marca-nom img {
-  height: 40px;
-  width: 40px;
+  height: 72px;
+  width: 72px;
   border-radius: 50%;
   object-fit: cover;
   display: block;
 }
+.capcalera-eines {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  color: var(--accent);
+}
+.capcalera-idioma {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.capcalera-idioma select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  padding: 0.4rem 1.1rem 0.4rem 0;
+  width: 4.6rem;
+  cursor: pointer;
+}
+.capcalera-idioma .capcalera-xevro {
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+}
+.capcalera-xevro {
+  flex-shrink: 0;
+  transition: transform 160ms ease-out;
+}
+.capcalera-icona {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+.capcalera-icona:hover {
+  color: var(--tinta);
+}
+.capcalera-comptador {
+  position: absolute;
+  top: 0.15rem;
+  right: 0.05rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--paper);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1;
+}
+.visualment-ocult {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 
-/* Botó de menú per a mòbil: només substitueix els enllaços en línia per
-   sota de 640px -- la píndola no té amplada per a quatre enllaços i el
-   logo un cop la pantalla és estreta. */
+.capcalera-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.25rem;
+  padding: 0.55rem 0 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.capcalera-nav a,
+.capcalera-desplegable-boto {
+  color: var(--pedra);
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0.35rem 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: color 120ms ease-out;
+}
+.capcalera-nav a:hover,
+.capcalera-desplegable-boto:hover {
+  color: var(--accent);
+}
+.capcalera-nav [aria-current="page"] {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.5rem;
+}
+.capcalera-desplegable {
+  position: relative;
+}
+.capcalera-desplegable.obert .capcalera-xevro {
+  transform: rotate(180deg);
+}
+.capcalera-desplegable-llista {
+  list-style: none;
+  margin: 0;
+  padding: 0.6rem 0;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  min-width: 15rem;
+  transform: translateX(-50%);
+  background: var(--paper);
+  border: 1px solid var(--salvia-clar);
+  box-shadow: 0 12px 28px rgba(47, 63, 62, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 140ms ease-out,
+    visibility 140ms;
+  z-index: 5;
+}
+.capcalera-desplegable.obert .capcalera-desplegable-llista {
+  opacity: 1;
+  visibility: visible;
+}
+.capcalera-desplegable-llista a {
+  display: flex;
+  padding: 0.6rem 1.25rem;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+.capcalera-desplegable-llista a:hover {
+  background: var(--salvia-clar);
+}
+
+/* Botó de menú per a mòbil: substitueix el menú en línia per sota de
+   900px, on no hi caben cinc entrades. */
 .menu-mobil {
   display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 5px;
-  width: 34px;
-  height: 34px;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   border: none;
   background: none;
   cursor: pointer;
-  flex-shrink: 0;
+  grid-column: 1;
+  justify-self: start;
 }
 .menu-mobil span {
   display: block;
-  width: 18px;
-  height: 2px;
-  background: var(--tinta);
+  width: 20px;
+  height: 1.5px;
+  background: var(--accent);
   border-radius: 2px;
   transition:
     transform 200ms ease-out,
     opacity 200ms ease-out;
 }
 .site-header.menu-obert .menu-mobil span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
+  transform: translateY(6.5px) rotate(45deg);
 }
 .site-header.menu-obert .menu-mobil span:nth-child(2) {
   opacity: 0;
 }
 .site-header.menu-obert .menu-mobil span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
+  transform: translateY(-6.5px) rotate(-45deg);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   .site-header {
-    gap: 0.5rem;
-    padding: 0.6rem 0.7rem;
+    padding: 0.5rem 1rem 0;
   }
-  .site-header nav {
-    display: none;
-    position: absolute;
-    top: calc(100% + 0.6rem);
-    right: 0;
-    /* El marc ha d'ajustar-se al text més llarg ("Esdeveniments"), no a
-       l'amplada de la píndola tancada (logo + botó): amb `left:0; right:0`
-       el desplegable quedava tan estret com la píndola i els enllaços més
-       llargs sortien del marc en lloc de trencar de línia (les paraules
-       no tenen cap espai on partir-se). `width: max-content` el fa créixer
-       cap a l'esquerra fins al que calgui, ancorat per la dreta sota el
-       botó de menú; `max-width` evita que arribi a tocar la vora esquerra
-       de la pantalla en un mòbil molt estret. */
-    left: auto;
-    width: max-content;
-    max-width: calc(100vw - 2.5rem);
-    flex-direction: column;
-    gap: 0.15rem;
-    padding: 0.75rem;
-    background: color-mix(in srgb, var(--paper) 92%, transparent);
-    -webkit-backdrop-filter: saturate(1.4) blur(16px);
-    backdrop-filter: saturate(1.4) blur(16px);
-    border: 1px solid color-mix(in srgb, var(--rosa) 65%, transparent);
-    border-radius: 20px;
-    box-shadow: 0 14px 30px rgba(75, 64, 72, 0.18);
-  }
-  .site-header nav a {
-    padding: 0.7rem 1rem;
-    white-space: nowrap;
-  }
-  .site-header.menu-obert nav {
-    display: flex;
+  .marca-nom img {
+    height: 64px;
+    width: 64px;
   }
   .menu-mobil {
     display: flex;
+  }
+  .capcalera-idioma {
+    display: none;
+  }
+  .capcalera-eines {
+    gap: 0.1rem;
+  }
+  .capcalera-nav {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0.5rem 0 1.25rem;
+    border-top: 1px solid var(--salvia-clar);
+    margin-top: 0.5rem;
+  }
+  .site-header.menu-obert .capcalera-nav {
+    display: flex;
+  }
+  .capcalera-nav a,
+  .capcalera-desplegable-boto {
+    width: 100%;
+    justify-content: center;
+    padding: 0.85rem 0;
+  }
+  .capcalera-desplegable-llista {
+    position: static;
+    transform: none;
+    min-width: 0;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    display: none;
+    opacity: 1;
+    visibility: visible;
+  }
+  .capcalera-desplegable.obert .capcalera-desplegable-llista {
+    display: block;
+  }
+  .capcalera-desplegable-llista a {
+    justify-content: center;
+    background: var(--salvia-clar);
+    padding: 0.7rem 0;
   }
 }
 
@@ -273,7 +419,7 @@ a {
 }
 
 .site-footer {
-  border-top: 1px solid var(--rosa);
+  border-top: 1px solid var(--salvia-clar);
   margin-top: 5rem;
   padding: 2rem;
   font-size: 0.85rem;
@@ -334,7 +480,7 @@ a {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.5rem;
-  border-top: 1px solid var(--rosa);
+  border-top: 1px solid var(--salvia-clar);
   padding: 1.25rem 0;
   font-size: 0.78rem;
 }
@@ -344,7 +490,7 @@ a {
    fix amb 'position: sticky' pur -- sense JavaScript ni llibreria -- i el
    panell següent el va cobrint en pujar. Zero cost de rendiment. */
 .hero {
-  height: 100svh;
+  height: calc(100svh - var(--alcada-capcalera));
   min-height: 480px;
   position: sticky;
   top: 0;
@@ -358,16 +504,13 @@ a {
   inset: -6%;
   animation: heroZoom 22s ease-in-out infinite alternate;
 }
-/* Centre del ram dins de foto-5.jpg (1400x933), mesurat sobre la imatge
-   real: el cap del ram hi queda entre el 30% i el 68% de l'amplada. Amb
-   `object-fit: cover`, el mòbil (capçalera molt més alta que ampla) només
-   ensenya un 30% de l'amplada de la foto -- amb el 70% d'abans, la
-   finestra visible queia gairebé tota a la dreta del ram (nomes s'hi veia
-   un tros del llaç). Es fixa aquí, en CSS, i no `inline` a Inici.tsx,
-   perquè un `style` inline sempre guanya a una regla de fulla d'estils i
-   feia que aquesta mateixa regla no tingués mai efecte. */
+/* Punt focal de foto-02996.jpg (2200x1464): el ram omple el quadre i el
+   degradat blanc cobreix l'esquerra on viu el text; es desplaça cap a la
+   dreta perquè en pantalles estretes (mòbil) la finestra visible quedi
+   sobre els clavells i no sobre el paper estampat. Es fixa aquí, en CSS,
+   perquè un `style` inline guanyaria a aquesta regla. */
 .hero .placeholder img {
-  object-position: 50% 40%;
+  object-position: 65% 45%;
 }
 .hero::before {
   content: "";
@@ -437,18 +580,12 @@ a {
   position: relative;
   z-index: 2;
   background: var(--paper);
-  box-shadow: 0 -24px 48px rgba(33, 20, 26, 0.16);
+  box-shadow: 0 -24px 48px rgba(47, 63, 62, 0.16);
 }
 @media (prefers-reduced-motion: reduce) {
   .hero .placeholder {
     animation: none;
     transform: scale(1.05);
-  }
-  .inici-bloc .placeholder img {
-    transition: none;
-  }
-  .inici-bloc:hover .placeholder img {
-    transform: none;
   }
 }
 .hero-contingut h1 {
@@ -457,7 +594,10 @@ a {
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  font-size: clamp(2.25rem, 6vw, 4rem);
+  /* Mes petit que abans (4rem): "Taller floral" es més llarg que "Nunu
+     Flowers" i, a 4rem, la darrera lletra entrava al ram. A 3,5vw acaba
+     abans del ram a tots els amples d'escriptori. */
+  font-size: clamp(2.25rem, 3.5vw, 3.25rem);
   line-height: 1.05;
   margin: 0 0 0.75rem;
 }
@@ -466,6 +606,16 @@ a {
   margin: 0 0 1.75rem;
   max-width: 34ch;
   color: var(--pedra);
+}
+.hero-contingut p.hero-lema {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.6vw, 1.875rem);
+  line-height: 1.3;
+  color: var(--tinta);
+  max-width: 24ch;
+  margin: 0 0 2rem;
 }
 .botons {
   display: flex;
@@ -486,6 +636,10 @@ a {
   .hero-contingut p {
     font-size: 1rem;
     margin-bottom: 1.5rem;
+  }
+  .hero-contingut p.hero-lema {
+    font-size: 1.35rem;
+    max-width: 22ch;
   }
   .hero-contingut .boto {
     padding: 0.7rem 1.35rem;
@@ -526,7 +680,7 @@ a {
   border-color: var(--paper);
 }
 .boto-secundari:hover {
-  background: rgba(251, 246, 242, 0.15);
+  background: rgba(246, 245, 238, 0.15);
 }
 .boto-principal.sobre-clar {
   background: var(--accent);
@@ -538,103 +692,38 @@ a {
   border-color: var(--tinta);
 }
 .boto-secundari.sobre-clar:hover {
-  background: var(--rosa);
+  background: var(--salvia-clar);
 }
 
-/* Capçalera a Inici: la píndola de vidre és la mateixa a totes les
-   pantalles; aquí només se li commuta la visibilitat amb `.header--reveal`
-   (a React, la classe la posa nomes qui la munta a Inici — ja no cal
-   escopir-la per `id` de pantalla com feia la maqueta HTML). Amagada
-   mentre s'és a dalt de tot de la foto a pantalla completa, apareix quan
-   es baixa "una mica". */
-.site-header.header--reveal {
-  opacity: 0;
-  transform: translateX(-50%) translateY(-14px);
-  pointer-events: none;
+/* "Una mica de mi": text sol, sense foto (no n'hi ha cap de la Núria).
+   Columna estreta de lectura: Cormorant al títol, Mulish al cos amb
+   interlineat generós perquè sigui còmode de llegir de mig a mig. */
+.inici-mi {
+  max-width: 60ch;
+  margin: 0 auto;
+  padding: 6rem 0 7rem;
 }
-.site-header.header--reveal.nav-visible {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-  pointer-events: auto;
-}
-
-.inici-seccio {
-  padding: 5.5rem 0 4.5rem;
-}
-.inici-seccio h2 {
+.inici-mi h2 {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(1.625rem, 3.4vw, 2.125rem);
-  margin: 0 0 0.6rem;
+  font-size: clamp(2rem, 4.2vw, 2.75rem);
+  line-height: 1.15;
+  color: var(--accent);
+  margin: 0 0 1.75rem;
 }
-.inici-seccio-intro {
-  color: var(--pedra);
-  max-width: 52ch;
-  margin: 0;
-  font-size: 1.02rem;
+.inici-mi p {
+  font-size: 1.075rem;
+  line-height: 1.8;
+  color: var(--tinta);
+  margin: 0 0 1.25rem;
 }
-
-/* Història de la marca: bloc de text sol, sense foto. */
-.inici-historia {
-  max-width: 62ch;
-  margin: 0 auto;
-  padding: 5rem 0;
-  text-align: center;
-  border-top: 1px solid var(--rosa);
-}
-.inici-historia-destacat {
+.inici-mi .inici-mi-salutacio {
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 500;
-  font-size: clamp(1.375rem, 2.6vw, 1.75rem);
-  color: var(--tinta);
-  line-height: 1.4;
-  margin: 0 0 1.25rem;
-}
-.inici-historia-cos {
-  color: var(--pedra);
-  font-size: 0.95rem;
-  margin: 0;
-}
-.inici-graella-dos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2.5rem;
-  margin-top: 2.5rem;
-}
-@media (max-width: 720px) {
-  .inici-graella-dos {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Cada bloc és un únic enllaç -- tota la targeta és clicable -- amb dos
-   micro-moviments d'estil (zoom lent de la foto i fletxa que llisca). */
-.inici-bloc {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-}
-.inici-bloc .placeholder {
-  aspect-ratio: 4 / 5;
-  margin-bottom: 1.25rem;
-}
-.inici-bloc .placeholder img {
-  transition: transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-.inici-bloc:hover .placeholder img {
-  transform: scale(1.045);
-}
-.inici-bloc h3 {
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  font-weight: 500;
-  margin: 0 0 0.4rem;
-}
-.inici-bloc p {
-  color: var(--pedra);
-  font-size: 0.95rem;
-  margin: 0 0 0.9rem;
+  font-size: clamp(1.5rem, 2.8vw, 1.875rem);
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
 }
 .enllac-fletxa {
   font-size: 0.9rem;
@@ -663,9 +752,6 @@ a {
   border-right: 1px solid currentColor;
   border-top: 1px solid currentColor;
   transform: translateY(-50%) rotate(45deg);
-}
-.inici-bloc:hover .enllac-fletxa .fletxa {
-  width: 1.6em;
 }
 .enllac-fletxa:hover .fletxa {
   width: 1.6em;
@@ -698,13 +784,13 @@ a {
   border-bottom: 1px solid currentColor;
 }
 .pagina-tornar {
-  padding-top: 7rem;
+  padding-top: 2.5rem;
   display: inline-flex;
 }
 
 /* ---- 2. BOTIGA ---- */
 .pagina-cap {
-  padding: 7rem 0 1.75rem;
+  padding: 2.5rem 0 1.75rem;
 }
 .pagina-cap h1 {
   font-family: var(--font-display);
@@ -723,8 +809,8 @@ a {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1px;
-  background: var(--rosa);
-  border: 1px solid var(--rosa);
+  background: var(--salvia-clar);
+  border: 1px solid var(--salvia-clar);
   margin-top: 1rem;
 }
 @media (max-width: 900px) {
@@ -798,7 +884,7 @@ a {
 }
 
 .producte-targeta-cta {
-  background: var(--rosa);
+  background: var(--salvia-clar);
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -864,7 +950,7 @@ a {
   line-height: 1;
   color: var(--tinta);
   padding: 0 0 0.1rem;
-  box-shadow: 0 4px 14px rgba(75, 64, 72, 0.14);
+  box-shadow: 0 4px 14px rgba(47, 63, 62, 0.14);
   opacity: 0;
   pointer-events: none;
   transition:
@@ -910,7 +996,7 @@ a {
   padding: 0;
   cursor: pointer;
   background: color-mix(in srgb, var(--paper) 65%, transparent);
-  box-shadow: 0 0 0 1px rgba(33, 20, 26, 0.15);
+  box-shadow: 0 0 0 1px rgba(47, 63, 62, 0.15);
   transition:
     background-color 150ms ease-out,
     transform 150ms ease-out;
@@ -947,7 +1033,7 @@ a {
   font-size: 0.8rem;
   color: var(--pedra);
   text-transform: none;
-  border-bottom: 1px solid var(--rosa);
+  border-bottom: 1px solid var(--salvia-clar);
   padding-bottom: 0.75rem;
   margin-bottom: 1rem;
 }
@@ -979,14 +1065,14 @@ a {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--rosa);
+  border-top: 1px solid var(--salvia-clar);
 }
 .composicio-llista li {
   font-family: var(--font-display);
   font-style: italic;
   font-size: 1.05rem;
   padding: 0.6rem 0;
-  border-bottom: 1px solid var(--rosa);
+  border-bottom: 1px solid var(--salvia-clar);
   display: flex;
   justify-content: space-between;
   gap: 1rem;
@@ -1044,9 +1130,14 @@ a {
   left: 0;
   bottom: 0;
   right: 0;
-  padding: 1rem 1.25rem;
+  padding: 2.75rem 1.25rem 1rem;
   z-index: 2;
-  background: linear-gradient(0deg, rgba(33, 30, 26, 0.65), transparent);
+  background: linear-gradient(
+    0deg,
+    rgba(30, 42, 41, 0.88) 0%,
+    rgba(30, 42, 41, 0.6) 55%,
+    transparent 100%
+  );
   color: var(--paper);
 }
 .projecte-item .etiqueta h3 {
@@ -1057,7 +1148,7 @@ a {
 }
 .projecte-item .etiqueta span {
   font-size: 0.8rem;
-  opacity: 0.85;
+  opacity: 0.92;
 }
 
 /* ---- 4b. PROJECTE — DETALL ---- */
@@ -1070,11 +1161,11 @@ a {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 7rem 1.25rem 0;
+  padding: 2rem 1.25rem 0;
 }
 @media (max-width: 700px) {
   .projecte-detall-hero {
-    padding: 7rem 0 0;
+    padding: 2rem 0 0;
   }
 }
 .projecte-detall-cos {
@@ -1085,7 +1176,7 @@ a {
   font-size: 0.85rem;
   color: var(--pedra);
   text-transform: none;
-  border-bottom: 1px solid var(--rosa);
+  border-bottom: 1px solid var(--salvia-clar);
   padding-bottom: 0.75rem;
   margin: 0 0 1rem;
 }
@@ -1162,7 +1253,7 @@ a {
 .contacte-nota {
   margin: 1.5rem 0 0;
   padding-top: 1.25rem;
-  border-top: 1px solid var(--rosa);
+  border-top: 1px solid var(--salvia-clar);
   color: var(--pedra);
   font-size: 0.85rem;
   max-width: 36ch;
@@ -1170,7 +1261,7 @@ a {
 
 /* ---- 6. SEGUIMENT DE COMANDA ---- */
 .seguiment-cerca {
-  padding: 7rem 0 4rem;
+  padding: 3rem 0 4rem;
 }
 .seguiment-cerca-graella {
   display: grid;
@@ -1204,10 +1295,10 @@ a {
   max-width: 44ch;
 }
 .seguiment {
-  padding: 7rem 0 4rem;
+  padding: 3rem 0 4rem;
 }
 .seguiment-cap {
-  border-bottom: 1px solid var(--rosa);
+  border-bottom: 1px solid var(--salvia-clar);
   padding-bottom: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -1236,7 +1327,7 @@ a {
   left: 9px;
   right: 9px;
   height: 1px;
-  background: var(--rosa);
+  background: var(--salvia-clar);
   z-index: 0;
 }
 .estat {
@@ -1262,7 +1353,7 @@ a {
 .estat.actual .punt {
   background: var(--paper);
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--rosa);
+  box-shadow: 0 0 0 3px var(--salvia-clar);
 }
 .estat span {
   font-size: 0.8rem;
@@ -1275,7 +1366,7 @@ a {
   font-weight: 500;
 }
 .seguiment-detall {
-  background: var(--rosa);
+  background: var(--salvia-clar);
   padding: 1.5rem 1.75rem;
   border-radius: 12px;
   margin-top: 2rem;
@@ -1306,7 +1397,7 @@ a {
   transition: background-color 120ms ease-out;
 }
 .quantitat-control button:hover {
-  background: var(--rosa);
+  background: var(--salvia-clar);
 }
 .quantitat-control input {
   width: 2.75rem;
@@ -1337,96 +1428,13 @@ a {
   margin-bottom: 0.5rem;
 }
 
-/* ---- 7. CISTELLA: icona flotant i calaix lateral (ADR-008) ---- */
-/* Icona despenjada del menú: mateix vidre esmerilat que .site-header, com
-   un cercle independent (arquitectura.md, ADR-008).
-   Mida i animació igualades a .site-header (ADR-010): l'alçada real de
-   .site-header (mesurada amb Playwright: 61.19px) surt de logo 2.5rem +
-   padding vertical 0.6rem*2 + vora 1px*2 -- exactament la fórmula del
-   calc() de sota, perquè els dos cercles/píndoles facin la mateixa mida
-   encara que un tingui una alçada "automàtica" (per contingut) i l'altre
-   una mida fixa. La transició i l'escalat en hover repeteixen els valors
-   de .site-header:hover en lloc dels propis d'abans (que eren més grans
-   i canviaven de color de fons, cosa que .site-header no fa). */
-.cistella-flotant {
-  position: fixed;
-  top: 1.25rem;
-  right: 1.25rem;
-  z-index: 40;
-  width: calc(2.5rem + 1.2rem + 2px);
-  height: calc(2.5rem + 1.2rem + 2px);
-  border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--rosa) 65%, transparent);
-  background: color-mix(in srgb, var(--paper) 74%, transparent);
-  -webkit-backdrop-filter: saturate(1.4) blur(16px);
-  backdrop-filter: saturate(1.4) blur(16px);
-  box-shadow: 0 10px 30px rgba(75, 64, 72, 0.14);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition:
-    transform 180ms var(--ease-out, ease-out),
-    box-shadow 180ms ease-out,
-    opacity 220ms ease-out;
-}
-.cistella-flotant:hover {
-  transform: scale(1.015);
-  box-shadow: 0 14px 38px rgba(75, 64, 72, 0.2);
-}
-/* Aparició sincronitzada amb .site-header.header--reveal (ADR-011): a
-   Inici, amagada mentre s'és a dalt de tot i apareix en baixar "una mica",
-   amb el mateix llindar de scroll i el mateix moviment (nomes sense la
-   translateX(-50%), perquè la cistella no està centrada horitzontalment). */
-.cistella-flotant.flotant--reveal {
-  opacity: 0;
-  transform: translateY(-14px);
-  pointer-events: none;
-}
-.cistella-flotant.flotant--reveal.nav-visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-.cistella-flotant-icona {
-  width: 1.75rem;
-  height: 1.75rem;
-  display: block;
-  background-color: var(--tinta);
-  -webkit-mask-image: url("/assets/icona-cistella.png");
-  mask-image: url("/assets/icona-cistella.png");
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-}
-.cistella-flotant-comptador {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.2em;
-  height: 1.2em;
-  padding: 0 0.3em;
-  border-radius: 999px;
-  background: var(--accent);
-  color: var(--paper);
-  font-size: 0.68rem;
-  font-weight: 600;
-  line-height: 1;
-  box-shadow: 0 0 0 2px var(--paper);
-}
-
+/* ---- 7. CISTELLA: calaix lateral (ADR-008); el botó viu a la capçalera ---- */
 /* Fons semitransparent darrere el calaix; el clic hi tanca la cistella. */
 .calaix-fons {
   position: fixed;
   inset: 0;
   z-index: 45;
-  background: rgba(43, 34, 38, 0.38);
+  background: rgba(30, 42, 41, 0.38);
   opacity: 0;
   pointer-events: none;
   transition: opacity 200ms ease-out;
@@ -1449,12 +1457,16 @@ a {
   background: var(--paper);
   display: flex;
   flex-direction: column;
-  box-shadow: -14px 0 32px rgba(43, 34, 38, 0.18);
   transform: translateX(100%);
-  transition: transform 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition:
+    transform 240ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 240ms ease-out;
 }
+/* L'ombra només amb el calaix obert: tancat, la seva ombra de 32px
+   sobresortia per la vora dreta de la pantalla com una franja grisa. */
 .calaix-cistella--obert {
   transform: translateX(0);
+  box-shadow: -14px 0 32px rgba(30, 42, 41, 0.18);
 }
 @media (prefers-reduced-motion: reduce) {
   .calaix-cistella,
@@ -1468,7 +1480,7 @@ a {
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 1.5rem 1rem;
-  border-bottom: 1px solid var(--rosa);
+  border-bottom: 1px solid var(--salvia-clar);
   flex-shrink: 0;
 }
 .calaix-capcalera h2 {
@@ -1482,7 +1494,7 @@ a {
   height: 2rem;
   border: none;
   border-radius: 50%;
-  background: var(--rosa);
+  background: var(--salvia-clar);
   color: var(--tinta);
   font-size: 0.95rem;
   line-height: 1;
@@ -1516,7 +1528,7 @@ a {
   display: flex;
   gap: 0.85rem;
   padding: 1rem 0;
-  border-bottom: 1px solid var(--rosa);
+  border-bottom: 1px solid var(--salvia-clar);
 }
 .calaix-article:first-child {
   padding-top: 0;
@@ -1587,7 +1599,7 @@ a {
 .calaix-resum {
   flex-shrink: 0;
   padding: 1.1rem 1.5rem 1.5rem;
-  border-top: 1px solid var(--rosa);
+  border-top: 1px solid var(--salvia-clar);
 }
 .calaix-resum-linia {
   display: flex;
@@ -1601,7 +1613,7 @@ a {
   font-size: 1.25rem;
   font-weight: 500;
   color: var(--tinta);
-  border-top: 1px solid var(--rosa);
+  border-top: 1px solid var(--salvia-clar);
   margin-top: 0.3rem;
   padding-top: 0.85rem;
   margin-bottom: 0.9rem;
@@ -1639,7 +1651,7 @@ a {
   background: color-mix(in srgb, var(--paper) 88%, transparent);
   -webkit-backdrop-filter: saturate(1.4) blur(16px);
   backdrop-filter: saturate(1.4) blur(16px);
-  border-bottom: 1px solid var(--rosa);
+  border-bottom: 1px solid var(--salvia-clar);
 }
 .admin-barra-marca {
   display: flex;
@@ -1671,8 +1683,8 @@ a {
   padding-bottom: 4rem;
 }
 .admin-avis {
-  background: color-mix(in srgb, var(--rosa) 40%, var(--paper));
-  border: 1px solid var(--rosa);
+  background: color-mix(in srgb, var(--salvia-clar) 40%, var(--paper));
+  border: 1px solid var(--salvia-clar);
   border-radius: 14px;
   padding: 0.9rem 1.1rem;
   font-size: 0.85rem;
@@ -1688,7 +1700,7 @@ a {
   margin-bottom: 3rem;
 }
 .admin-xifra {
-  border: 1px solid var(--rosa);
+  border: 1px solid var(--salvia-clar);
   border-radius: 14px;
   padding: 1.1rem 1.2rem;
   background: var(--paper);
@@ -1737,7 +1749,7 @@ a {
   gap: 1rem;
 }
 .admin-comanda {
-  border: 1px solid var(--rosa);
+  border: 1px solid var(--salvia-clar);
   border-radius: 16px;
   padding: 1.25rem;
   background: var(--paper);
@@ -1748,7 +1760,7 @@ a {
   justify-content: space-between;
   gap: 1rem;
   padding-bottom: 0.9rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--rosa) 55%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--salvia-clar) 55%, transparent);
 }
 .admin-comanda-id {
   font-family: var(--font-display);
@@ -1773,12 +1785,12 @@ a {
   border: 1px solid transparent;
 }
 .admin-estat--comprat {
-  background: color-mix(in srgb, var(--rosa) 45%, var(--paper));
+  background: color-mix(in srgb, var(--salvia-clar) 45%, var(--paper));
   color: var(--tinta);
-  border-color: var(--rosa);
+  border-color: var(--salvia-clar);
 }
 .admin-estat--tramitat {
-  background: color-mix(in srgb, var(--rosa) 75%, var(--paper));
+  background: color-mix(in srgb, var(--salvia-clar) 75%, var(--paper));
   color: var(--tinta);
   border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 }
@@ -1830,7 +1842,7 @@ a {
 .admin-comentari {
   margin: 0 0 1rem;
   padding: 0.75rem 0.9rem;
-  background: color-mix(in srgb, var(--rosa) 22%, var(--paper));
+  background: color-mix(in srgb, var(--salvia-clar) 22%, var(--paper));
   border-radius: 10px;
   font-size: 0.87rem;
   color: var(--tinta);
@@ -1841,7 +1853,7 @@ a {
   align-items: center;
   gap: 0.75rem;
   padding-top: 0.9rem;
-  border-top: 1px solid color-mix(in srgb, var(--rosa) 55%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--salvia-clar) 55%, transparent);
 }
 .admin-comanda-accions label {
   font-size: 0.85rem;
@@ -1882,7 +1894,7 @@ a {
   display: flex;
   align-items: center;
   gap: 1rem;
-  border: 1px solid var(--rosa);
+  border: 1px solid var(--salvia-clar);
   border-radius: 16px;
   padding: 0.9rem;
   background: var(--paper);
@@ -1958,8 +1970,8 @@ a {
   opacity: 0.7;
 }
 .fitxa-exhaurit {
-  background: color-mix(in srgb, var(--rosa) 35%, var(--paper));
-  border: 1px solid var(--rosa);
+  background: color-mix(in srgb, var(--salvia-clar) 35%, var(--paper));
+  border: 1px solid var(--salvia-clar);
   border-radius: 12px;
   padding: 0.8rem 1rem;
   font-size: 0.87rem;
@@ -1980,12 +1992,50 @@ a {
   border-radius: 999px;
 }
 .calaix-avis {
-  background: color-mix(in srgb, var(--rosa) 35%, var(--paper));
-  border: 1px solid var(--rosa);
+  background: color-mix(in srgb, var(--salvia-clar) 35%, var(--paper));
+  border: 1px solid var(--salvia-clar);
   border-radius: 10px;
   padding: 0.7rem 0.85rem;
   font-size: 0.8rem;
   color: var(--tinta);
   margin: 0 0 0.9rem;
   line-height: 1.45;
+}
+
+/* Missatge quan una secció encara no té contingut: explica què passa i
+   dona una acció, en lloc de deixar la pantalla buida. */
+.estat-buit {
+  max-width: 44ch;
+  margin: 2rem auto 5rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: color-mix(in srgb, var(--salvia-clar) 45%, var(--paper));
+}
+.estat-buit h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+.estat-buit p {
+  color: var(--pedra);
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+}
+
+/* Text que la Núria encara ha de facilitar: visible per no confondre'l
+   amb contingut definitiu. */
+.text-pendent {
+  display: inline-block;
+  border-left: 2px solid var(--salvia);
+  padding-left: 0.75rem;
+  font-style: italic;
+  color: var(--pedra);
+}
+.projecte-item .etiqueta p {
+  margin: 0.5rem 0 0;
+  color: var(--pedra);
+  font-size: 0.95rem;
+  line-height: 1.55;
 }

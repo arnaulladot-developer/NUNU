@@ -7,12 +7,18 @@ import { Carousel, type CarouselImage } from "@/components/Carousel";
 
 const FOTOS_PROJECTE: CarouselImage[] = [
   {
-    src: "/assets/foto-4.jpg",
+    src: "/assets/client/foto-02996.jpg",
     alt: "Fotografia d'exemple del projecte, vista 1",
-    badge: "Foto d'exemple — pendent de confirmar",
+    badge: "Projecte d'exemple — pendent de confirmar",
   },
-  { src: "/assets/foto-2.jpg", alt: "Fotografia d'exemple del projecte, vista 2" },
-  { src: "/assets/foto-5.jpg", alt: "Fotografia d'exemple del projecte, vista 3" },
+  {
+    src: "/assets/client/foto-02997.jpg",
+    alt: "Fotografia d'exemple del projecte, vista 2",
+  },
+  {
+    src: "/assets/client/foto-03003.jpg",
+    alt: "Fotografia d'exemple del projecte, vista 3",
+  },
 ];
 
 /**

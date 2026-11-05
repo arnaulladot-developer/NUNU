@@ -8,15 +8,22 @@ import { Carousel, type CarouselImage } from "@/components/Carousel";
 import { QuantityStepper } from "@/components/QuantityStepper";
 import { useCart } from "@/context/cart";
 import { useBotiga } from "@/context/botiga";
+import { CONTACTE } from "@/lib/data";
 
 const FOTOS_FITXA: CarouselImage[] = [
   {
-    src: "/assets/foto-3.jpg",
-    alt: "Fotografia d'exemple de producte, vista 1",
-    badge: "Foto d'exemple — pendent de confirmar",
+    src: "/assets/client/foto-02991.jpg",
+    alt: "Ram sec amb grocs, taronges i vermells embolicat en paper kraft",
+    badge: "Producte d'exemple — fotos pendents d'assignar",
   },
-  { src: "/assets/foto-4.jpg", alt: "Fotografia d'exemple de producte, vista 2" },
-  { src: "/assets/foto-5.jpg", alt: "Fotografia d'exemple de producte, vista 3" },
+  {
+    src: "/assets/client/foto-02997.jpg",
+    alt: "Ram sec amb rosa i fúcsia sobre paper estampat de flors",
+  },
+  {
+    src: "/assets/client/foto-03001.jpg",
+    alt: "Ram sec de blat, flors blanques i verds",
+  },
 ];
 
 const PRODUCT_ID = "vesc";
@@ -101,7 +108,7 @@ export function Fitxa() {
             {exhaurit && (
               <p className="fitxa-exhaurit">
                 Aquest ram està exhaurit ara mateix. Escriu-nos per WhatsApp
-                (+34 611 22 33 44) i et direm quan el tornarem a tenir.
+                ({CONTACTE.telefon}) i et direm quan el tornarem a tenir.
               </p>
             )}
             <div className="fitxa-quantitat">

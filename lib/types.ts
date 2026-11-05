@@ -15,6 +15,7 @@ export type ScreenId =
   | "projectes"
   | "projecte-detall"
   | "contacte"
+  | "fires"
   | "seguiment"
   /** Panell intern de la propietària (ADR-014). No surt a cap menú: només
    * s'hi arriba introduint les credencials de demostració al formulari de

@@ -6,7 +6,7 @@ import { NavLink } from "@/components/NavLink";
 import { QuantityStepper } from "@/components/QuantityStepper";
 import { useCart } from "@/context/cart";
 import { useBotiga } from "@/context/botiga";
-import { getProducteById } from "@/lib/data";
+import { CONTACTE, getProducteById } from "@/lib/data";
 
 /**
  * Calaix lateral de la cistella (ADR-008, arquitectura.md): substitueix la
@@ -115,7 +115,7 @@ export function CistellaCalaix() {
               La Núria la revisa avui mateix i et confirma per correu el
               termini d&apos;enviament exacte.
             </p>
-            <p>Qualsevol dubte, escriu-nos per WhatsApp: +34 611 22 33 44.</p>
+            <p>Qualsevol dubte, escriu-nos per WhatsApp: {CONTACTE.telefon}.</p>
             <NavLink
               to="botiga"
               className="boto boto-principal"

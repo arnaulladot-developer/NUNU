@@ -10,6 +10,7 @@ import { Projectes } from "@/components/screens/Projectes";
 import { ProjecteDetall } from "@/components/screens/ProjecteDetall";
 import { Contacte } from "@/components/screens/Contacte";
 import { Seguiment } from "@/components/screens/Seguiment";
+import { Fires } from "@/components/screens/Fires";
 import { Admin } from "@/components/screens/Admin";
 import { CistellaCalaix } from "@/components/CistellaCalaix";
 
@@ -33,6 +34,8 @@ function ScreenRouter() {
       return <Projectes />;
     case "projecte-detall":
       return <ProjecteDetall />;
+    case "fires":
+      return <Fires />;
     case "contacte":
       return <Contacte />;
     case "seguiment":

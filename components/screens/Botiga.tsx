@@ -5,44 +5,73 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { NavLink } from "@/components/NavLink";
 import { ArrowLabel } from "@/components/ArrowLabel";
 import { ProductCard } from "@/components/ProductCard";
-import { PRODUCTES } from "@/lib/data";
+import { useNavigation } from "@/context/navigation";
+import { PRODUCTES, getCategoriaFlors } from "@/lib/data";
 
 export function Botiga() {
+  const { filtre } = useNavigation();
+  const categoria = getCategoriaFlors(filtre);
+  const productes = categoria
+    ? PRODUCTES.filter((producte) => producte.categoria === categoria.id)
+    : PRODUCTES;
+
   return (
     <section>
       <SiteHeader />
       <div className="contenidor">
         <div className="pagina-cap">
-          <h1>Rams</h1>
+          <h1>{categoria ? categoria.nom : "Flors"}</h1>
           <p>
-            Rams de flor seca. Enviem a tota la península en 24-48h
-            laborables; Balears i Canàries, 3-5 dies.
+            Enviem a tota la península en 24-48h laborables; Balears i
+            Canàries, 3-5 dies.
           </p>
         </div>
-        <div className="productes-graella">
-          {PRODUCTES.map((producte) => (
-            <ProductCard key={producte.id} producte={producte} />
-          ))}
-          <NavLink to="botiga" className="producte-targeta producte-targeta-cta">
+
+        {productes.length === 0 ? (
+          <div className="estat-buit">
+            <h2>Encara no tenim {categoria?.nom.toLowerCase()} a la botiga</h2>
             <p>
-              Fins a vint rams en total
-              <br />
-              (nombre real segons el catàleg del client)
+              Estem preparant aquesta secció. Si en vols un per a una data
+              concreta, escriu-nos i ho mirem.
             </p>
-            <ArrowLabel>Veure&apos;ls tots</ArrowLabel>
-          </NavLink>
-        </div>
-        <p
-          style={{
-            textAlign: "center",
-            color: "var(--pedra)",
-            fontSize: ".85rem",
-            padding: "1.5rem 0",
-          }}
-        >
-          Fotografies d&apos;exemple, pendents de confirmar quina va a cada
-          producte.
-        </p>
+            <NavLink to="contacte" className="boto boto-principal">
+              Escriure a la Núria
+            </NavLink>
+          </div>
+        ) : (
+          <div className="productes-graella">
+            {productes.map((producte) => (
+              <ProductCard key={producte.id} producte={producte} />
+            ))}
+            {!categoria && (
+              <NavLink
+                to="botiga"
+                className="producte-targeta producte-targeta-cta"
+              >
+                <p>
+                  Fins a vint rams en total
+                  <br />
+                  (nombre real segons el catàleg del client)
+                </p>
+                <ArrowLabel>Veure&apos;ls tots</ArrowLabel>
+              </NavLink>
+            )}
+          </div>
+        )}
+
+        {productes.length > 0 && (
+          <p
+            style={{
+              textAlign: "center",
+              color: "var(--pedra)",
+              fontSize: ".85rem",
+              padding: "1.5rem 0",
+            }}
+          >
+            Fotografies d&apos;exemple, pendents de confirmar quina va a cada
+            producte.
+          </p>
+        )}
       </div>
       <SiteFooter />
     </section>

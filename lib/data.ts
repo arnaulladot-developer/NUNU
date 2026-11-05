@@ -6,9 +6,23 @@
  * catàleg real — cap component en depèn de valors concrets.
  */
 
+/** Seccions del desplegable "Flors" del menú. */
+export const CATEGORIES_FLORS = [
+  { id: "frescos", nom: "Rams frescos" },
+  { id: "secs", nom: "Rams secs i preservats" },
+  { id: "centres", nom: "Centres" },
+] as const;
+
+export type CategoriaFlorsId = (typeof CATEGORIES_FLORS)[number]["id"];
+
+export function getCategoriaFlors(id: string | null) {
+  return CATEGORIES_FLORS.find((categoria) => categoria.id === id);
+}
+
 export interface Producte {
   id: string;
   nom: string;
+  categoria: CategoriaFlorsId;
   composicio: string;
   preu: number;
   foto: string;
@@ -18,30 +32,34 @@ export const PRODUCTES: Producte[] = [
   {
     id: "vesc",
     nom: "Vesc",
+    categoria: "secs",
     composicio: "Lagurus ovatus, Limonium sinuatum",
     preu: 38,
-    foto: "/assets/foto-1.jpg",
+    foto: "/assets/client/foto-02991.jpg",
   },
   {
     id: "bruma",
     nom: "Bruma",
+    categoria: "secs",
     composicio: "Helichrysum, Nigella damascena",
     preu: 32,
-    foto: "/assets/foto-3.jpg",
+    foto: "/assets/client/foto-03000.jpg",
   },
   {
     id: "ambre",
     nom: "Ambre",
+    categoria: "secs",
     composicio: "Phalaris, Achillea millefolium",
     preu: 45,
-    foto: "/assets/foto-4.jpg",
+    foto: "/assets/client/foto-02994.jpg",
   },
   {
     id: "terra",
     nom: "Terra",
+    categoria: "secs",
     composicio: "Gypsophila paniculata, Craspedia",
     preu: 29,
-    foto: "/assets/foto-5.jpg",
+    foto: "/assets/client/foto-03003.jpg",
   },
 ];
 
@@ -140,41 +158,93 @@ export const COMANDES_EXEMPLE: Comanda[] = [
   },
 ];
 
+/** Seccions del desplegable "Ocasions" del menú. */
+export const OCASIONS = [
+  { id: "casaments", nom: "Casaments" },
+  { id: "esdeveniments", nom: "Esdeveniments" },
+] as const;
+
+export type OcasioId = (typeof OCASIONS)[number]["id"];
+
+export function getOcasio(id: string | null) {
+  return OCASIONS.find((ocasio) => ocasio.id === id);
+}
+
 export interface ProjecteResum {
   id: string;
   titol: string;
+  ocasio: OcasioId;
   categoria: string;
   data: string;
   foto: string;
+  /** `true` si la foto és de la clienta i correspon al projecte; `false` si és d'exemple. */
+  fotoReal: boolean;
 }
 
+/**
+ * Els dos esdeveniments tenen foto real de la Núria; els títols només
+ * descriuen el que es veu a la foto i la data és pendent. El casament és
+ * un exemple mentre no hi hagi fotos de casaments.
+ */
 export const PROJECTES: ProjecteResum[] = [
   {
     id: "can-ferrer",
+    ocasio: "casaments",
     titol: "Casament a can Ferrer",
     categoria: "Casament",
     data: "maig 2026",
-    foto: "/assets/foto-4.jpg",
+    foto: "/assets/client/foto-02997.jpg",
+    fotoReal: false,
   },
   {
-    id: "sopar-compromis",
-    titol: "Decoració per a un sopar de compromís",
-    categoria: "Decoració d'espai",
-    data: "abril 2026",
-    foto: "/assets/foto-2.jpg",
+    id: "taula-clavells",
+    ocasio: "esdeveniments",
+    titol: "Centre de taula amb clavells i eucaliptus",
+    categoria: "Esdeveniment",
+    data: "data pendent",
+    foto: "/assets/client/esdeveniments-1.jpg",
+    fotoReal: true,
   },
   {
-    id: "aparador-tardor",
-    titol: "Aparador de tardor",
-    categoria: "Aparador comercial",
-    data: "octubre 2025",
-    foto: "/assets/foto-1.jpg",
-  },
-  {
-    id: "sopar-nadal",
-    titol: "Sopar de Nadal d'empresa",
-    categoria: "Esdeveniment d'empresa",
-    data: "desembre 2025",
-    foto: "/assets/foto-5.jpg",
+    id: "taula-gerros",
+    ocasio: "esdeveniments",
+    titol: "Gerros petits amb clavells a la taula",
+    categoria: "Esdeveniment",
+    data: "data pendent",
+    foto: "/assets/client/esdeveniments-2.jpg",
+    fotoReal: true,
   },
 ];
+
+/**
+ * Fires i mercats on serà Nunu Flowers. Està buit a propòsit: la Núria
+ * facilitarà les fires reals i es van afegint aquí, una entrada per fira
+ * (el més proper primer). Amb la llista buida, la pantalla Fires mostra
+ * un missatge honest en comptes de fires inventades.
+ */
+export interface Fira {
+  id: string;
+  nom: string;
+  lloc: string;
+  /** Text lliure ("12 i 13 d'abril 2027"): evita fer-se un lio amb zones horàries. */
+  dates: string;
+  foto?: string;
+  descripcio?: string;
+}
+
+export const FIRES: Fira[] = [];
+
+/**
+ * Dades de contacte reals de la Núria. El telèfon el va facilitar ella
+ * (5/11/2026). El correu i l'Instagram són els d'abans i estan PENDENTS
+ * DE CONFIRMAR: el correu era inventat a la maqueta (design-system.md
+ * §7.12) i cal saber quin domini propi tindrà de veritat.
+ */
+export const CONTACTE = {
+  telefon: "+34 652 02 01 99",
+  telefonHref: "tel:+34652020199",
+  whatsappHref: "https://wa.me/34652020199",
+  correu: "hola@nunuflowers.com",
+  instagram: "@nunu__flowers",
+  instagramHref: "https://instagram.com/nunu__flowers",
+} as const;

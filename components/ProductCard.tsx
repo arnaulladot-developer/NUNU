@@ -46,12 +46,12 @@ export function ProductCard({ producte }: ProductCardProps) {
         <div className="placeholder">
           <Image
             src={producte.foto}
-            alt="Fotografia d'exemple de producte"
+            alt={`Ram ${producte.nom}`}
             fill
             sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw"
             style={{ objectFit: "cover" }}
           />
-          <span className="badge-exemple">Foto d&apos;exemple</span>
+          <span className="badge-exemple">Producte d&apos;exemple</span>
           {exhaurit && <span className="badge-exhaurit">Exhaurit</span>}
         </div>
         <p className="producte-nom">{producte.nom}</p>

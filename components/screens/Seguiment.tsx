@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { useNavigation } from "@/context/navigation";
 import { useBotiga } from "@/context/botiga";
+import { CONTACTE } from "@/lib/data";
 
 /** Credencials de demostració del panell intern (ADR-014). No són cap
  * mesura de seguretat: viuen al codi que s'envia al navegador i qualsevol
@@ -115,7 +116,7 @@ export function Seguiment() {
                   El número de comanda surt al correu de confirmació — mai
                   és el número de la comanda anterior més u, perquè no es
                   pugui endevinar. Si no el trobes, escriu-nos per WhatsApp:
-                  +34 611 22 33 44.
+                  {CONTACTE.telefon}.
                 </p>
               </div>
             </div>
@@ -166,7 +167,7 @@ export function Seguiment() {
                 Enviat el 17 de setembre amb GLS. Arribada estimada: 2-3 dies
                 laborables.
               </p>
-              <p>Qualsevol dubte, escriu-nos per WhatsApp: +34 611 22 33 44.</p>
+              <p>Qualsevol dubte, escriu-nos per WhatsApp: {CONTACTE.telefon}.</p>
             </div>
           </div>
         </div>

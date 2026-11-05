@@ -4,7 +4,6 @@ import Image from "next/image";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { NavLink } from "@/components/NavLink";
-import { ArrowLabel } from "@/components/ArrowLabel";
 import { useHeroParallax } from "@/hooks/useHeroParallax";
 
 export function Inici() {
@@ -12,13 +11,13 @@ export function Inici() {
 
   return (
     <section>
-      <SiteHeader revealOnScroll />
+      <SiteHeader />
 
       <div className="hero">
         <div className="placeholder">
           <Image
-            src="/assets/foto-5.jpg"
-            alt="Fotografia d'exemple facilitada pel client — ram sobre esglaons de pedra"
+            src="/assets/client/foto-02996.jpg"
+            alt="Ram sec de la Núria amb clavells rosa i vermells, cues de conill i espigues"
             fill
             sizes="100vw"
             style={{ objectFit: "cover" }}
@@ -26,17 +25,13 @@ export function Inici() {
           />
         </div>
         <div className="hero-contingut" ref={heroRef}>
-          <h1>Nunu Flowers</h1>
-          <p>
-            Rams de flor seca compostos a mà, i projectes a mida per a
-            casaments i esdeveniments.
+          <h1>Taller floral</h1>
+          <p className="hero-lema">
+            Flors fetes amb amor, pensades per fer especial cada moment.
           </p>
           <div className="botons">
             <NavLink to="botiga" className="boto boto-principal">
-              Veure la botiga
-            </NavLink>
-            <NavLink to="contacte" className="boto boto-secundari sobre-clar">
-              Demanar un encàrrec
+              Descobreix les meves flors
             </NavLink>
           </div>
         </div>
@@ -44,65 +39,21 @@ export function Inici() {
 
       <div className="hero-panel">
         <div className="contenidor">
-          <section className="inici-seccio">
-            <h2>Dues maneres de començar</h2>
-            <p className="inici-seccio-intro">
-              Tria un ram ja compost de la col·lecció, o explica&apos;ns el
-              projecte i preparem un encàrrec fet a mida.
+          <section className="inici-mi" aria-labelledby="inici-mi-titol">
+            <h2 id="inici-mi-titol">Una mica de mi</h2>
+            <p className="inici-mi-salutacio">Hola! Soc la Núria.</p>
+            <p>
+              El que va començar com una afició pel món de les flors s’ha
+              convertit avui en la meva feina. M’encanta poder expressar-me a
+              través d’elles, deixar volar la imaginació i donar vida a la meva
+              creativitat en cada creació.
             </p>
-            <div className="inici-graella-dos">
-              <NavLink to="botiga" className="inici-bloc">
-                <div className="placeholder">
-                  <Image
-                    src="/assets/foto-3.jpg"
-                    alt="Fotografia d'exemple — ram de la col·lecció"
-                    fill
-                    sizes="(max-width: 720px) 100vw, 50vw"
-                    style={{ objectFit: "cover" }}
-                  />
-                  <span className="badge-exemple">Foto d&apos;exemple</span>
-                </div>
-                <h3>La col·lecció</h3>
-                <p>
-                  Vint composicions, cadascuna documentada com una pàgina
-                  d&apos;un quadern de flors premsades: espècie a espècie.
-                </p>
-                <ArrowLabel>Veure tots els rams</ArrowLabel>
-              </NavLink>
-              <NavLink to="projectes" className="inici-bloc">
-                <div className="placeholder">
-                  <Image
-                    src="/assets/foto-4.jpg"
-                    alt="Fotografia d'exemple — projecte de casament"
-                    fill
-                    sizes="(max-width: 720px) 100vw, 50vw"
-                    style={{ objectFit: "cover" }}
-                  />
-                  <span className="badge-exemple">Foto d&apos;exemple</span>
-                </div>
-                <h3>Encàrrecs i esdeveniments</h3>
-                <p>
-                  Casaments, decoració i projectes a mida. Es parla abans de
-                  compondre.
-                </p>
-                <ArrowLabel>Veure projectes</ArrowLabel>
-              </NavLink>
-            </div>
-          </section>
-
-          <section className="inici-historia">
-            <p className="inici-historia-destacat">
-              &ldquo;Vaig començar amb flor seca perquè volia regalar alguna
-              cosa que no s&apos;apagués al cap de tres dies.&rdquo;
-            </p>
-            <p className="inici-historia-cos">
-              La Núria va créixer envoltada d&apos;hivernacles al Penedès, i
-              quan va decidir dedicar-s&apos;hi ho va fer al revés del que
-              havia après: en comptes de flor fresca que dura una setmana,
-              composa rams de flor seca que es queden anys sencers a casa.
-              Cada peça surt de les seves mans, espècie a espècie, pensada
-              per regalar-se, penjar-se o mirar-se sense pressa — i per no
-              haver-se de tornar a comprar l&apos;any que ve.
+            <p>
+              Però el que més m’agrada és poder formar part dels vostres
+              moments especials, dels dies més importants de les vostres vides
+              i d’aquelles ocasions en què regaleu flors per expressar alguna
+              cosa bonica. Em fa molta il·lusió sentir que, d’alguna manera,
+              també en formo part. <span aria-hidden="true">❤️</span>
             </p>
           </section>
         </div>
