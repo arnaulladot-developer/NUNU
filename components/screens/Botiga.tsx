@@ -6,11 +6,11 @@ import { NavLink } from "@/components/NavLink";
 import { ArrowLabel } from "@/components/ArrowLabel";
 import { ProductCard } from "@/components/ProductCard";
 import { useNavigation } from "@/context/navigation";
-import { PRODUCTES, getCategoriaFlors } from "@/lib/data";
+import { PRODUCTES, getCategoria } from "@/lib/data";
 
 export function Botiga() {
   const { filtre } = useNavigation();
-  const categoria = getCategoriaFlors(filtre);
+  const categoria = getCategoria(filtre);
   const productes = categoria
     ? PRODUCTES.filter((producte) => producte.categoria === categoria.id)
     : PRODUCTES;
@@ -29,7 +29,7 @@ export function Botiga() {
 
         {productes.length === 0 ? (
           <div className="estat-buit">
-            <h2>Encara no tenim {categoria?.nom.toLowerCase()} a la botiga</h2>
+            <h2>Encara no tenim {categoria?.buit} a la botiga</h2>
             <p>
               Estem preparant aquesta secció. Si en vols un per a una data
               concreta, escriu-nos i ho mirem.

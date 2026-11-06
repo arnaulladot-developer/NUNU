@@ -5,10 +5,15 @@ import Image from "next/image";
 import { NavLink } from "@/components/NavLink";
 import { useCart } from "@/context/cart";
 import { useNavigation } from "@/context/navigation";
-import { CATEGORIES_FLORS, OCASIONS } from "@/lib/data";
+import {
+  CATEGORIES_FLORS,
+  CATEGORIES_NADAL,
+  OCASIONS,
+  getCategoria,
+} from "@/lib/data";
 import type { ScreenId } from "@/lib/types";
 
-type SeccioMenu = "inici" | "flors" | "ocasions" | "fires" | "contacte";
+type SeccioMenu = "inici" | "flors" | "nadal" | "ocasions" | "fires" | "contacte";
 
 /** A quina entrada del menú pertany cada pantalla (per subratllar l'activa). */
 const SECCIO_PER_PANTALLA: Partial<Record<ScreenId, SeccioMenu>> = {
@@ -156,9 +161,13 @@ function Desplegable({ id, etiqueta, actiu, items, onNavigate }: DesplegableProp
 
 export function SiteHeader() {
   const [menuObert, setMenuObert] = useState(false);
-  const { screen } = useNavigation();
+  const { screen, filtre } = useNavigation();
   const { totalArticles, commutarCalaix } = useCart();
-  const seccioActiva = SECCIO_PER_PANTALLA[screen];
+  // La Botiga serveix Flors i Nadal: la secció activa la decideix el filtre.
+  const seccioActiva: SeccioMenu | undefined =
+    screen === "botiga" && getCategoria(filtre)?.seccio === "nadal"
+      ? "nadal"
+      : SECCIO_PER_PANTALLA[screen];
 
   function tancaTot() {
     setMenuObert(false);
@@ -251,7 +260,18 @@ export function SiteHeader() {
           actiu={seccioActiva === "flors"}
           onNavigate={tancaTot}
           items={CATEGORIES_FLORS.map((categoria) => ({
-            etiqueta: categoria.nom,
+            etiqueta: categoria.etiqueta,
+            to: "botiga",
+            filtre: categoria.id,
+          }))}
+        />
+        <Desplegable
+          id="menu-nadal"
+          etiqueta="Nadal"
+          actiu={seccioActiva === "nadal"}
+          onNavigate={tancaTot}
+          items={CATEGORIES_NADAL.map((categoria) => ({
+            etiqueta: categoria.etiqueta,
             to: "botiga",
             filtre: categoria.id,
           }))}

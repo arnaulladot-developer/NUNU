@@ -25,6 +25,7 @@ export function SiteFooter({ variant = "simple" }: SiteFooterProps) {
           </div>
           <nav className="site-footer-nav" aria-label="Peu de pàgina">
             <NavLink to="botiga">Flors</NavLink>
+            <NavLink to="botiga" filtre="nadal-rams">Nadal</NavLink>
             <NavLink to="projectes">Ocasions</NavLink>
             <NavLink to="fires">Fires</NavLink>
             <NavLink to="contacte">Contacte</NavLink>

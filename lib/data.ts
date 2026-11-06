@@ -6,23 +6,41 @@
  * catàleg real — cap component en depèn de valors concrets.
  */
 
-/** Seccions del desplegable "Flors" del menú. */
-export const CATEGORIES_FLORS = [
-  { id: "frescos", nom: "Rams frescos" },
-  { id: "secs", nom: "Rams secs i preservats" },
-  { id: "centres", nom: "Centres" },
+/**
+ * Categories de la botiga. `seccio` diu a quin desplegable del menú
+ * pertanyen; `etiqueta` és el text curt del menú (dins del desplegable el
+ * context ja el dóna el nom de la secció) i `nom` és el títol de la pàgina.
+ * `buit` completa la frase "Encara no tenim ___ a la botiga" quan la
+ * categoria no té productes (no es pot derivar de `nom` posant-lo en
+ * minúscules perquè "Nadal" duu majúscula).
+ */
+export const CATEGORIES = [
+  { id: "frescos", seccio: "flors", etiqueta: "Rams frescos", nom: "Rams frescos", buit: "rams frescos" },
+  { id: "secs", seccio: "flors", etiqueta: "Rams secs i preservats", nom: "Rams secs i preservats", buit: "rams secs i preservats" },
+  { id: "centres", seccio: "flors", etiqueta: "Centres", nom: "Centres", buit: "centres" },
+  { id: "nadal-rams", seccio: "nadal", etiqueta: "Rams", nom: "Rams de Nadal", buit: "rams de Nadal" },
+  { id: "nadal-corones", seccio: "nadal", etiqueta: "Corones", nom: "Corones de Nadal", buit: "corones de Nadal" },
+  { id: "nadal-centres", seccio: "nadal", etiqueta: "Centres", nom: "Centres de Nadal", buit: "centres de Nadal" },
 ] as const;
 
-export type CategoriaFlorsId = (typeof CATEGORIES_FLORS)[number]["id"];
+export type CategoriaId = (typeof CATEGORIES)[number]["id"];
+export type SeccioBotiga = (typeof CATEGORIES)[number]["seccio"];
 
-export function getCategoriaFlors(id: string | null) {
-  return CATEGORIES_FLORS.find((categoria) => categoria.id === id);
+export const CATEGORIES_FLORS = CATEGORIES.filter(
+  (categoria) => categoria.seccio === "flors",
+);
+export const CATEGORIES_NADAL = CATEGORIES.filter(
+  (categoria) => categoria.seccio === "nadal",
+);
+
+export function getCategoria(id: string | null) {
+  return CATEGORIES.find((categoria) => categoria.id === id);
 }
 
 export interface Producte {
   id: string;
   nom: string;
-  categoria: CategoriaFlorsId;
+  categoria: CategoriaId;
   composicio: string;
   preu: number;
   foto: string;
