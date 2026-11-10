@@ -504,13 +504,12 @@ a {
   inset: -6%;
   animation: heroZoom 22s ease-in-out infinite alternate;
 }
-/* Punt focal de foto-02996.jpg (2200x1464): el ram omple el quadre i el
-   degradat blanc cobreix l'esquerra on viu el text; es desplaça cap a la
-   dreta perquè en pantalles estretes (mòbil) la finestra visible quedi
-   sobre els clavells i no sobre el paper estampat. Es fixa aquí, en CSS,
-   perquè un `style` inline guanyaria a aquesta regla. */
+/* Punt focal de inici.jpg (3056x4592, vertical): a l'escriptori `cover`
+   només ensenya una franja horitzontal de la foto; el 42% d'alçada hi
+   deixa les flors roses i blanques (amb valors més alts només es veuen fulles). Es fixa aquí, en CSS, perquè un `style` inline
+   guanyaria a aquesta regla. */
 .hero .placeholder img {
-  object-position: 65% 45%;
+  object-position: 50% 42%;
 }
 .hero::before {
   content: "";
@@ -808,9 +807,12 @@ a {
 .productes-graella {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--salvia-clar);
-  border: 1px solid var(--salvia-clar);
+  /* Les línies de separació són vores de cada targeta, no el fons de la
+     graella: amb un fons, les cel·les buides de l'última fila (p. ex. una
+     sola corona) es pintaven de gris. */
+  gap: 0;
+  border-top: 1px solid var(--salvia-clar);
+  border-left: 1px solid var(--salvia-clar);
   margin-top: 1rem;
 }
 @media (max-width: 900px) {
@@ -825,6 +827,8 @@ a {
 }
 .producte-targeta {
   background: var(--paper);
+  border-right: 1px solid var(--salvia-clar);
+  border-bottom: 1px solid var(--salvia-clar);
   padding: 1.5rem 1.25rem 1.75rem;
   display: flex;
   flex-direction: column;
@@ -1149,48 +1153,6 @@ a {
 .projecte-item .etiqueta span {
   font-size: 0.8rem;
   opacity: 0.92;
-}
-
-/* ---- 4b. PROJECTE — DETALL ---- */
-/* width:100% obligatori (ADR-006, arquitectura.md): és fill directe de
-   <section>, que és un contenidor flex en columna, i un fill amb
-   `margin: 0 auto` per centrar-se no s'hi estira per si sol -- es queda
-   al seu "max-content width" (aquí, uns 96px, la mida del contingut
-   posicionat en absolut del carrusel) enlloc d'omplir el `max-width`. */
-.projecte-detall-hero {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem 1.25rem 0;
-}
-@media (max-width: 700px) {
-  .projecte-detall-hero {
-    padding: 2rem 0 0;
-  }
-}
-.projecte-detall-cos {
-  padding: 2.5rem 0 4rem;
-}
-.projecte-detall-cos .etiqueta-nota {
-  font-family: var(--font-text);
-  font-size: 0.85rem;
-  color: var(--pedra);
-  text-transform: none;
-  border-bottom: 1px solid var(--salvia-clar);
-  padding-bottom: 0.75rem;
-  margin: 0 0 1rem;
-}
-.projecte-detall-cos h1 {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
-  margin: 0 0 1.25rem;
-}
-.projecte-descripcio {
-  color: var(--tinta);
-  font-size: 1.05rem;
-  line-height: 1.75;
-  margin: 0;
 }
 
 /* ---- 5. CONTACTE / FORMULARI ---- */
@@ -2038,4 +2000,191 @@ a {
   color: var(--pedra);
   font-size: 0.95rem;
   line-height: 1.55;
+}
+
+/* ---- fitxa de producte: descripció, mides, característiques ---- */
+.foto-pendent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--salvia-clar);
+  color: var(--pedra);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+.fitxa-foto-pendent {
+  aspect-ratio: 4 / 5;
+}
+.fitxa-descripcio {
+  margin: 0 0 0.9rem;
+  color: var(--tinta);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+.fitxa-mides {
+  border: 0;
+  padding: 0;
+  margin: 1.25rem 0 1.5rem;
+  min-width: 0;
+}
+.fitxa-mides legend {
+  padding: 0;
+  margin-bottom: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pedra);
+}
+.mides-llista {
+  display: grid;
+  gap: 0.5rem;
+}
+.mida-opcio {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(2.25rem, auto) 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--salvia);
+  background: var(--paper);
+  cursor: pointer;
+  transition: border-color 120ms ease-out, background-color 120ms ease-out;
+}
+.mida-opcio input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.mida-opcio:hover {
+  background: var(--salvia-clar);
+}
+.mida-opcio--activa {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  background: var(--salvia-clar);
+}
+.mida-opcio:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.mida-etiqueta {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.mida-detall {
+  font-size: 0.9rem;
+  color: var(--tinta);
+}
+.mida-preu {
+  font-weight: 600;
+  color: var(--accent);
+}
+.mides-nota {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  color: var(--pedra);
+}
+.caracteristiques-llista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--salvia-clar);
+}
+.caracteristiques-llista li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--salvia-clar);
+  font-size: 0.9rem;
+  color: var(--tinta);
+  line-height: 1.5;
+}
+.calaix-mida {
+  color: var(--pedra);
+  font-weight: 400;
+}
+
+/* ---- Fires i Ocasions ---- */
+.fires-llista {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--salvia-clar);
+}
+.fira {
+  display: grid;
+  grid-template-columns: 15rem 1fr auto;
+  align-items: baseline;
+  gap: 0.5rem 2rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--salvia-clar);
+}
+.fira-data {
+  margin: 0;
+  font-weight: 600;
+  color: var(--accent);
+}
+.fira-nom {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+.fira-horari {
+  margin: 0;
+  color: var(--pedra);
+  font-size: 0.95rem;
+}
+@media (max-width: 700px) {
+  .fira {
+    grid-template-columns: 1fr;
+  }
+}
+.fires-tancament {
+  max-width: 40rem;
+  margin: 2rem 0;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+.fires-fotos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-bottom: 3rem;
+}
+.fires-fotos .placeholder {
+  aspect-ratio: 4 / 5;
+}
+@media (max-width: 700px) {
+  .fires-fotos {
+    grid-template-columns: 1fr;
+  }
+}
+.ocasio + .ocasio {
+  margin-top: 4rem;
+}
+.ocasio .pagina-cap p {
+  max-width: 44rem;
+}
+.ocasio .pagina-cap p + p {
+  margin-top: 0.9rem;
+}
+.ocasio-contacte {
+  text-align: center;
+  margin: 3rem 0;
+}
+.ocasio-contacte p {
+  margin: 1.25rem 0 0;
+  color: var(--pedra);
+  font-size: 0.95rem;
+}
+.ocasio-contacte p a {
+  color: var(--accent);
+}
+figure.projecte-item {
+  margin: 0;
 }

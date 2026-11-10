@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { NavLink } from "@/components/NavLink";
 import { QuantityStepper } from "@/components/QuantityStepper";
-import { useCart } from "@/context/cart";
+import { ProductImage } from "@/components/ProductImage";
+import { clauArticle, useCart } from "@/context/cart";
 import { useBotiga } from "@/context/botiga";
-import { CONTACTE, getProducteById } from "@/lib/data";
+import { CONTACTE, getMida, getProducteById } from "@/lib/data";
 
 /**
  * Calaix lateral de la cistella (ADR-008, arquitectura.md): substitueix la
@@ -143,22 +143,23 @@ export function CistellaCalaix() {
               <ul className="calaix-llista">
                 {articles.map((article) => {
                   const producte = getProducteById(article.productId);
-                  if (!producte) return null;
+                  const mida = producte ? getMida(producte, article.midaId) : undefined;
+                  if (!producte || !mida) return null;
+                  const clau = clauArticle(article.productId, article.midaId);
+                  const etiquetaMida =
+                    producte.mides.length > 1 ? `${producte.nom}, mida ${mida.etiqueta}` : producte.nom;
                   return (
-                    <li className="calaix-article" key={article.productId}>
+                    <li className="calaix-article" key={clau}>
                       <div className="calaix-article-foto placeholder">
-                        <Image
-                          src={producte.foto}
-                          alt="Fotografia d'exemple de producte"
-                          fill
-                          sizes="64px"
-                          style={{ objectFit: "cover" }}
-                        />
+                        <ProductImage producte={producte} sizes="64px" decoratiu />
                       </div>
                       <div className="calaix-article-info">
                         <div className="calaix-article-capcalera">
                           <p className="producte-nom">
                             {producte.nom}
+                            {producte.mides.length > 1 && (
+                              <span className="calaix-mida"> · {mida.etiqueta}</span>
+                            )}
                             {esExhaurit(article.productId) && (
                               <span className="calaix-exhaurit">Exhaurit</span>
                             )}
@@ -166,8 +167,8 @@ export function CistellaCalaix() {
                           <button
                             type="button"
                             className="calaix-eliminar"
-                            aria-label={`Eliminar ${producte.nom} de la cistella`}
-                            onClick={() => eliminar(article.productId)}
+                            aria-label={`Eliminar ${etiquetaMida} de la cistella`}
+                            onClick={() => eliminar(article.productId, article.midaId)}
                             tabIndex={calaixObert ? 0 : -1}
                           >
                             ✕
@@ -175,28 +176,32 @@ export function CistellaCalaix() {
                         </div>
                         <div className="calaix-article-camp">
                           <QuantityStepper
-                            id={`calaix-quantitat-${article.productId}`}
+                            id={`calaix-quantitat-${clau}`}
                             value={article.quantitat}
                             onChange={(quantitat) =>
-                              actualitzarQuantitat(article.productId, quantitat)
+                              actualitzarQuantitat(article.productId, article.midaId, quantitat)
                             }
                           />
                           <span className="calaix-article-preu">
-                            {(producte.preu * article.quantitat).toFixed(2)} €
+                            {(mida.preu * article.quantitat).toFixed(2)} €
                           </span>
                         </div>
                         <div className="camp calaix-article-comentari">
-                          <label htmlFor={`calaix-comentari-${article.productId}`}>
+                          <label htmlFor={`calaix-comentari-${clau}`}>
                             Comentari (opcional)
                           </label>
                           <input
                             type="text"
-                            id={`calaix-comentari-${article.productId}`}
+                            id={`calaix-comentari-${clau}`}
                             placeholder="Per exemple, sense targeta de regal"
                             maxLength={140}
                             value={article.comentari}
                             onChange={(event) =>
-                              actualitzarComentari(article.productId, event.target.value)
+                              actualitzarComentari(
+                                article.productId,
+                                article.midaId,
+                                event.target.value,
+                              )
                             }
                             tabIndex={calaixObert ? 0 : -1}
                           />

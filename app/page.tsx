@@ -7,7 +7,6 @@ import { Inici } from "@/components/screens/Inici";
 import { Botiga } from "@/components/screens/Botiga";
 import { Fitxa } from "@/components/screens/Fitxa";
 import { Projectes } from "@/components/screens/Projectes";
-import { ProjecteDetall } from "@/components/screens/ProjecteDetall";
 import { Contacte } from "@/components/screens/Contacte";
 import { Seguiment } from "@/components/screens/Seguiment";
 import { Fires } from "@/components/screens/Fires";
@@ -32,8 +31,6 @@ function ScreenRouter() {
       return <Fitxa />;
     case "projectes":
       return <Projectes />;
-    case "projecte-detall":
-      return <ProjecteDetall />;
     case "fires":
       return <Fires />;
     case "contacte":

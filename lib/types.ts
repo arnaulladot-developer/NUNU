@@ -13,7 +13,6 @@ export type ScreenId =
   | "botiga"
   | "fitxa"
   | "projectes"
-  | "projecte-detall"
   | "contacte"
   | "fires"
   | "seguiment"

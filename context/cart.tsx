@@ -9,23 +9,25 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { getProducteById } from "@/lib/data";
+import { getMida, getProducteById } from "@/lib/data";
 
-const CLAU_EMMAGATZEMATGE = "nunu-cistella-v1";
+const CLAU_EMMAGATZEMATGE = "nunu-cistella-v2";
 const QUANTITAT_MAXIMA = 20;
 
 export interface ArticleCistella {
   productId: string;
+  /** Mida triada (S, M, L o única): el mateix ram en dues mides són dues línies. */
+  midaId: string;
   quantitat: number;
   comentari: string;
 }
 
 interface CartContextValue {
   articles: ArticleCistella[];
-  afegir: (productId: string, quantitat?: number) => void;
-  actualitzarQuantitat: (productId: string, quantitat: number) => void;
-  actualitzarComentari: (productId: string, comentari: string) => void;
-  eliminar: (productId: string) => void;
+  afegir: (productId: string, midaId: string, quantitat?: number) => void;
+  actualitzarQuantitat: (productId: string, midaId: string, quantitat: number) => void;
+  actualitzarComentari: (productId: string, midaId: string, comentari: string) => void;
+  eliminar: (productId: string, midaId: string) => void;
   buidar: () => void;
   totalArticles: number;
   totalPreu: number;
@@ -36,6 +38,15 @@ interface CartContextValue {
   obrirCalaix: () => void;
   tancarCalaix: () => void;
   commutarCalaix: () => void;
+}
+
+/** Identifica una línia de la cistella: producte + mida. */
+export function clauArticle(productId: string, midaId: string): string {
+  return `${productId}:${midaId}`;
+}
+
+function esMateixaLinia(a: ArticleCistella, productId: string, midaId: string) {
+  return a.productId === productId && a.midaId === midaId;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -52,6 +63,7 @@ function llegeixEmmagatzemat(): ArticleCistella[] {
         typeof item === "object" &&
         item !== null &&
         typeof (item as ArticleCistella).productId === "string" &&
+        typeof (item as ArticleCistella).midaId === "string" &&
         typeof (item as ArticleCistella).quantitat === "number",
     );
   } catch {
@@ -106,12 +118,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [articles, hidratat]);
 
-  const afegir = useCallback((productId: string, quantitat = 1) => {
+  const afegir = useCallback((productId: string, midaId: string, quantitat = 1) => {
     setArticles((actuals) => {
-      const existent = actuals.find((a) => a.productId === productId);
+      const existent = actuals.find((a) => esMateixaLinia(a, productId, midaId));
       if (existent) {
         return actuals.map((a) =>
-          a.productId === productId
+          esMateixaLinia(a, productId, midaId)
             ? {
                 ...a,
                 quantitat: Math.min(QUANTITAT_MAXIMA, a.quantitat + quantitat),
@@ -123,6 +135,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         ...actuals,
         {
           productId,
+          midaId,
           quantitat: Math.min(QUANTITAT_MAXIMA, Math.max(1, quantitat)),
           comentari: "",
         },
@@ -130,21 +143,31 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const actualitzarQuantitat = useCallback((productId: string, quantitat: number) => {
-    const clamped = Math.min(QUANTITAT_MAXIMA, Math.max(1, Math.round(quantitat) || 1));
-    setArticles((actuals) =>
-      actuals.map((a) => (a.productId === productId ? { ...a, quantitat: clamped } : a)),
-    );
-  }, []);
+  const actualitzarQuantitat = useCallback(
+    (productId: string, midaId: string, quantitat: number) => {
+      const clamped = Math.min(QUANTITAT_MAXIMA, Math.max(1, Math.round(quantitat) || 1));
+      setArticles((actuals) =>
+        actuals.map((a) =>
+          esMateixaLinia(a, productId, midaId) ? { ...a, quantitat: clamped } : a,
+        ),
+      );
+    },
+    [],
+  );
 
-  const actualitzarComentari = useCallback((productId: string, comentari: string) => {
-    setArticles((actuals) =>
-      actuals.map((a) => (a.productId === productId ? { ...a, comentari } : a)),
-    );
-  }, []);
+  const actualitzarComentari = useCallback(
+    (productId: string, midaId: string, comentari: string) => {
+      setArticles((actuals) =>
+        actuals.map((a) =>
+          esMateixaLinia(a, productId, midaId) ? { ...a, comentari } : a,
+        ),
+      );
+    },
+    [],
+  );
 
-  const eliminar = useCallback((productId: string) => {
-    setArticles((actuals) => actuals.filter((a) => a.productId !== productId));
+  const eliminar = useCallback((productId: string, midaId: string) => {
+    setArticles((actuals) => actuals.filter((a) => !esMateixaLinia(a, productId, midaId)));
   }, []);
 
   const buidar = useCallback(() => setArticles([]), []);
@@ -162,7 +185,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     () =>
       articles.reduce((suma, a) => {
         const producte = getProducteById(a.productId);
-        return suma + (producte ? producte.preu * a.quantitat : 0);
+        const mida = producte ? getMida(producte, a.midaId) : undefined;
+        return suma + (mida ? mida.preu * a.quantitat : 0);
       }, 0),
     [articles],
   );

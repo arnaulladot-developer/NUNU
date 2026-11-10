@@ -5,65 +5,83 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { NavLink } from "@/components/NavLink";
 import { useNavigation } from "@/context/navigation";
-import { PROJECTES, getOcasio } from "@/lib/data";
+import {
+  CONTACTE,
+  FOTOS_ESDEVENIMENTS,
+  OCASIONS,
+  TEXTOS_OCASIONS,
+  getOcasio,
+  type OcasioId,
+} from "@/lib/data";
 
-const BOTO_PER_OCASIO = {
-  casaments: "Explica'ns el teu casament",
+const BOTO_PER_OCASIO: Record<OcasioId, string> = {
+  casaments: "Explica'ns la teva idea",
   esdeveniments: "Explica'ns el teu esdeveniment",
-} as const;
+};
 
-export function Projectes() {
-  const { filtre } = useNavigation();
-  const ocasio = getOcasio(filtre);
-  const projectes = ocasio
-    ? PROJECTES.filter((projecte) => projecte.ocasio === ocasio.id)
-    : PROJECTES;
-
+function SeccioOcasio({ id, nom, titolPrincipal }: { id: OcasioId; nom: string; titolPrincipal: boolean }) {
+  const Titol = titolPrincipal ? "h1" : "h2";
   return (
-    <section>
-      <SiteHeader />
-      <div className="contenidor">
-        <div className="pagina-cap">
-          <h1>{ocasio ? ocasio.nom : "Ocasions"}</h1>
-          <p className="text-pendent">
-            Text d&apos;aquesta secció pendent: la Núria el facilitarà
-            (document de Word).
-          </p>
-        </div>
+    <div className="ocasio">
+      <div className="pagina-cap">
+        <Titol>{nom}</Titol>
+        {TEXTOS_OCASIONS[id].map((paragraf) => (
+          <p key={paragraf}>{paragraf}</p>
+        ))}
+      </div>
+
+      {id === "esdeveniments" && (
         <div className="projectes-graella">
-          {projectes.map((projecte) => (
-            <NavLink
-              key={projecte.id}
-              to="projecte-detall"
-              className="projecte-item"
-            >
+          {FOTOS_ESDEVENIMENTS.map((foto) => (
+            <figure key={foto.id} className="projecte-item">
               <div className="placeholder">
                 <Image
-                  src={projecte.foto}
-                  alt={
-                    projecte.fotoReal
-                      ? projecte.titol
-                      : `Fotografia d'exemple — ${projecte.titol}`
-                  }
+                  src={foto.foto}
+                  alt={foto.titol}
                   fill
                   sizes="(max-width: 700px) 100vw, 50vw"
                   style={{ objectFit: "cover" }}
                 />
               </div>
-              <div className="etiqueta">
-                <h3>{projecte.titol}</h3>
-                <span>
-                  {projecte.categoria} · {projecte.data}
-                </span>
-              </div>
-            </NavLink>
+              <figcaption className="etiqueta">
+                <h3>{foto.titol}</h3>
+              </figcaption>
+            </figure>
           ))}
         </div>
-        <div style={{ textAlign: "center", margin: "3rem 0" }}>
-          <NavLink to="contacte" className="boto boto-principal">
-            {ocasio ? BOTO_PER_OCASIO[ocasio.id] : "Explica'ns la teva ocasió"}
-          </NavLink>
-        </div>
+      )}
+
+      <div className="ocasio-contacte">
+        <NavLink to="contacte" className="boto boto-principal">
+          {BOTO_PER_OCASIO[id]}
+        </NavLink>
+        <p>
+          O escriu-nos directament: WhatsApp{" "}
+          <a href={CONTACTE.whatsappHref}>{CONTACTE.telefon}</a> · correu{" "}
+          <a href={`mailto:${CONTACTE.correu}`}>{CONTACTE.correu}</a>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export function Projectes() {
+  const { filtre } = useNavigation();
+  const ocasio = getOcasio(filtre);
+  const seccions = ocasio ? [ocasio] : OCASIONS;
+
+  return (
+    <section>
+      <SiteHeader />
+      <div className="contenidor">
+        {seccions.map((seccio) => (
+          <SeccioOcasio
+            key={seccio.id}
+            id={seccio.id}
+            nom={seccio.nom}
+            titolPrincipal={seccions.length === 1}
+          />
+        ))}
       </div>
       <SiteFooter />
     </section>

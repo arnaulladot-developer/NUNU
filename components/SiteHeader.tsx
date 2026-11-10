@@ -10,6 +10,7 @@ import {
   CATEGORIES_NADAL,
   OCASIONS,
   getCategoria,
+  getProducteById,
 } from "@/lib/data";
 import type { ScreenId } from "@/lib/types";
 
@@ -21,7 +22,6 @@ const SECCIO_PER_PANTALLA: Partial<Record<ScreenId, SeccioMenu>> = {
   botiga: "flors",
   fitxa: "flors",
   projectes: "ocasions",
-  "projecte-detall": "ocasions",
   fires: "fires",
   contacte: "contacte",
 };
@@ -163,9 +163,13 @@ export function SiteHeader() {
   const [menuObert, setMenuObert] = useState(false);
   const { screen, filtre } = useNavigation();
   const { totalArticles, commutarCalaix } = useCart();
-  // La Botiga serveix Flors i Nadal: la secció activa la decideix el filtre.
+  // La Botiga i la fitxa serveixen Flors i Nadal: la secció activa la decideix
+  // la categoria del filtre (o la del producte, a la fitxa).
+  const idCategoria =
+    screen === "fitxa" ? (getProducteById(filtre)?.categoria ?? null) : filtre;
   const seccioActiva: SeccioMenu | undefined =
-    screen === "botiga" && getCategoria(filtre)?.seccio === "nadal"
+    (screen === "botiga" || screen === "fitxa") &&
+    getCategoria(idCategoria)?.seccio === "nadal"
       ? "nadal"
       : SECCIO_PER_PANTALLA[screen];
 

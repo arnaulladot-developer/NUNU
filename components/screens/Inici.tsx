@@ -16,8 +16,8 @@ export function Inici() {
       <div className="hero">
         <div className="placeholder">
           <Image
-            src="/assets/client/foto-02996.jpg"
-            alt="Ram sec de la Núria amb clavells rosa i vermells, cues de conill i espigues"
+            src="/assets/catalog/inici.jpg"
+            alt="Branques d’eucaliptus i flors roses en una cistella sobre fons blanc"
             fill
             sizes="100vw"
             style={{ objectFit: "cover" }}

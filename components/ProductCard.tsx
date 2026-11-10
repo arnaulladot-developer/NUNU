@@ -1,71 +1,48 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { NavLink } from "@/components/NavLink";
-import { useCart } from "@/context/cart";
+import { ProductImage } from "@/components/ProductImage";
 import { useBotiga } from "@/context/botiga";
-import type { Producte } from "@/lib/data";
-
-const DURADA_CONFIRMACIO_MS = 1600;
+import { preuDesDe, type Producte } from "@/lib/data";
 
 interface ProductCardProps {
   producte: Producte;
 }
 
 /**
- * Targeta de producte de la Botiga: la imatge, el nom i el preu porten a la
- * fitxa (mateix comportament d'abans); "Afegir a la cistella" és un botó
- * independent perquè no es pot clavar un element interactiu dins d'un
- * enllaç (`<button>` dins de `<a>` no és HTML vàlid ni accessible).
+ * Targeta de producte de la Botiga: tota la targeta porta a la fitxa del
+ * producte, on es tria la mida i s'afegeix a la cistella. No hi ha botó
+ * d'afegir directe perquè cada producte té preu segons la mida.
  */
 export function ProductCard({ producte }: ProductCardProps) {
-  const { afegir } = useCart();
   const { esExhaurit } = useBotiga();
   const exhaurit = esExhaurit(producte.id);
-  const [confirmat, setConfirmat] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
-
-  function handleAfegir() {
-    if (exhaurit) return;
-    afegir(producte.id, 1);
-    setConfirmat(true);
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => setConfirmat(false), DURADA_CONFIRMACIO_MS);
-  }
+  const mesDUnaMida = producte.mides.length > 1;
 
   return (
     <div className={`producte-targeta${exhaurit ? " producte-targeta--exhaurit" : ""}`}>
-      <NavLink to="fitxa" className="producte-targeta-link">
+      <NavLink to="fitxa" filtre={producte.id} className="producte-targeta-link">
         <div className="placeholder">
-          <Image
-            src={producte.foto}
-            alt={`Ram ${producte.nom}`}
-            fill
+          <ProductImage
+            producte={producte}
             sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw"
-            style={{ objectFit: "cover" }}
           />
-          <span className="badge-exemple">Producte d&apos;exemple</span>
           {exhaurit && <span className="badge-exhaurit">Exhaurit</span>}
         </div>
         <p className="producte-nom">{producte.nom}</p>
-        <p className="producte-composicio">{producte.composicio}</p>
-        <div className="producte-preu">{producte.preu} €</div>
+        <p className="producte-composicio">{producte.resum}</p>
+        <div className="producte-preu">
+          {mesDUnaMida ? "Des de " : ""}
+          {preuDesDe(producte)} €
+        </div>
       </NavLink>
-      <button
-        type="button"
+      <NavLink
+        to="fitxa"
+        filtre={producte.id}
         className="boto boto-principal producte-afegir"
-        onClick={handleAfegir}
-        disabled={exhaurit}
       >
-        {exhaurit ? "Exhaurit" : confirmat ? "Afegit ✓" : "Afegir a la cistella"}
-      </button>
+        {mesDUnaMida ? "Triar mida" : "Veure el producte"}
+      </NavLink>
     </div>
   );
 }

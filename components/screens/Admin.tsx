@@ -1,12 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import { ProductImage } from "@/components/ProductImage";
 import { useNavigation } from "@/context/navigation";
 import { useBotiga } from "@/context/botiga";
 import {
   ESTATS_COMANDA,
   PRODUCTES,
+  getMida,
   getProducteById,
+  preuDesDe,
   type EstatComanda,
 } from "@/lib/data";
 
@@ -103,6 +106,7 @@ export function Admin() {
           <div className="admin-comandes">
             {comandes.map((comanda) => {
               const producte = getProducteById(comanda.productId);
+              const mida = producte ? getMida(producte, comanda.midaId) : undefined;
               const estatClasse = comanda.estat
                 .toLowerCase()
                 .replace("·", "")
@@ -133,8 +137,11 @@ export function Admin() {
                     <div className="admin-comanda-bloc">
                       <p className="admin-etiqueta">Comanda</p>
                       <p>
-                        {producte ? producte.nom : comanda.productId} ×{" "}
-                        {comanda.quantitat}
+                        {producte ? producte.nom : comanda.productId}
+                        {producte && producte.mides.length > 1 && mida
+                          ? ` (${mida.etiqueta})`
+                          : ""}{" "}
+                        × {comanda.quantitat}
                       </p>
                       <p className="admin-total">{comanda.total} €</p>
                     </div>
@@ -187,17 +194,11 @@ export function Admin() {
                   className={`admin-ram${fora ? " admin-ram--exhaurit" : ""}`}
                 >
                   <div className="admin-ram-foto">
-                    <Image
-                      src={producte.foto}
-                      alt=""
-                      fill
-                      sizes="120px"
-                      style={{ objectFit: "cover" }}
-                    />
+                    <ProductImage producte={producte} sizes="120px" decoratiu />
                   </div>
                   <div className="admin-ram-info">
                     <p className="admin-ram-nom">{producte.nom}</p>
-                    <p className="admin-suau">{producte.preu} €</p>
+                    <p className="admin-suau">des de {preuDesDe(producte)} €</p>
                     <p className={`admin-ram-estat${fora ? " admin-ram-estat--fora" : ""}`}>
                       {fora ? "Exhaurit" : "A la venda"}
                     </p>

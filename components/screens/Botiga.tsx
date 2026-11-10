@@ -3,7 +3,6 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { NavLink } from "@/components/NavLink";
-import { ArrowLabel } from "@/components/ArrowLabel";
 import { ProductCard } from "@/components/ProductCard";
 import { useNavigation } from "@/context/navigation";
 import { PRODUCTES, getCategoria } from "@/lib/data";
@@ -11,9 +10,12 @@ import { PRODUCTES, getCategoria } from "@/lib/data";
 export function Botiga() {
   const { filtre } = useNavigation();
   const categoria = getCategoria(filtre);
-  const productes = categoria
-    ? PRODUCTES.filter((producte) => producte.categoria === categoria.id)
-    : PRODUCTES;
+  // Sense filtre, la pàgina "Flors" mostra les flors; Nadal té el seu menú.
+  const productes = PRODUCTES.filter((producte) =>
+    categoria
+      ? producte.categoria === categoria.id
+      : getCategoria(producte.categoria)?.seccio === "flors",
+  );
 
   return (
     <section>
@@ -43,34 +45,7 @@ export function Botiga() {
             {productes.map((producte) => (
               <ProductCard key={producte.id} producte={producte} />
             ))}
-            {!categoria && (
-              <NavLink
-                to="botiga"
-                className="producte-targeta producte-targeta-cta"
-              >
-                <p>
-                  Fins a vint rams en total
-                  <br />
-                  (nombre real segons el catàleg del client)
-                </p>
-                <ArrowLabel>Veure&apos;ls tots</ArrowLabel>
-              </NavLink>
-            )}
           </div>
-        )}
-
-        {productes.length > 0 && (
-          <p
-            style={{
-              textAlign: "center",
-              color: "var(--pedra)",
-              fontSize: ".85rem",
-              padding: "1.5rem 0",
-            }}
-          >
-            Fotografies d&apos;exemple, pendents de confirmar quina va a cada
-            producte.
-          </p>
         )}
       </div>
       <SiteFooter />

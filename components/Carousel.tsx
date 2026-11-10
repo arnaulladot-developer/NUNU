@@ -87,35 +87,39 @@ export function Carousel({ images, ariaLabel, sizes, gran = false }: CarouselPro
           </div>
         ))}
       </div>
-      <button
-        type="button"
-        className="carrusel-fletxa carrusel-anterior"
-        aria-label="Foto anterior"
-        onClick={() => vaA(actiu - 1)}
-      >
-        ‹
-      </button>
-      <button
-        type="button"
-        className="carrusel-fletxa carrusel-seguent"
-        aria-label="Foto següent"
-        onClick={() => vaA(actiu + 1)}
-      >
-        ›
-      </button>
-      <div className="carrusel-punts" role="tablist" aria-label={ariaLabel}>
-        {images.map((imatge, index) => (
+      {images.length > 1 && (
+        <>
           <button
-            key={imatge.src}
             type="button"
-            role="tab"
-            aria-label={`Foto ${index + 1}`}
-            aria-selected={index === actiu}
-            className={index === actiu ? "actiu" : undefined}
-            onClick={() => vaA(index)}
-          />
-        ))}
-      </div>
+            className="carrusel-fletxa carrusel-anterior"
+            aria-label="Foto anterior"
+            onClick={() => vaA(actiu - 1)}
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            className="carrusel-fletxa carrusel-seguent"
+            aria-label="Foto següent"
+            onClick={() => vaA(actiu + 1)}
+          >
+            ›
+          </button>
+          <div className="carrusel-punts" role="tablist" aria-label={ariaLabel}>
+            {images.map((imatge, index) => (
+              <button
+                key={imatge.src}
+                type="button"
+                role="tab"
+                aria-label={`Foto ${index + 1}`}
+                aria-selected={index === actiu}
+                className={index === actiu ? "actiu" : undefined}
+                onClick={() => vaA(index)}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
