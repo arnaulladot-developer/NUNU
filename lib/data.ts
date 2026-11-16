@@ -1,13 +1,15 @@
 /**
- * Contingut d'exemple del prototip. Cap d'aquestes dades és real: preus,
- * composicions i fotografies són exemples facilitats o proposats mentre
- * la clienta confirma el catàleg definitiu (metode-de-disseny.md §7).
- * Substituir aquest fitxer és l'únic canvi necessari per posar-hi el
- * catàleg real — cap component en depèn de valors concrets.
+ * Contingut del lloc. El catàleg, les mides i els preus, els textos
+ * d'Ocasions, les fires i les fotografies són els reals de la Núria (document
+ * del 10/11/2026). Les comandes de mostra (`COMANDES_EXEMPLE`) i les dades
+ * de contacte marcades com a pendents NO són reals. Afegir un producte és
+ * afegir una entrada a `PRODUCTES` i les seves fotos a `public/assets/catalog/`:
+ * la ruta, el sitemap i les dades estructurades se'n deriven soles.
  */
 
 /**
- * Categories de la botiga. `seccio` diu a quin desplegable del menú
+ * Categories de la botiga. `slug` és el tros de la URL dins de la secció
+ * (`/flors/secs`, `/nadal/corones`); `seccio` diu a quin desplegable del menú
  * pertanyen; `etiqueta` és el text curt del menú (dins del desplegable el
  * context ja el dóna el nom de la secció) i `nom` és el títol de la pàgina.
  * `buit` completa la frase "Encara no tenim ___ a la botiga" quan la
@@ -15,12 +17,12 @@
  * minúscules perquè "Nadal" duu majúscula).
  */
 export const CATEGORIES = [
-  { id: "frescos", seccio: "flors", etiqueta: "Rams frescos", nom: "Rams frescos", buit: "rams frescos" },
-  { id: "secs", seccio: "flors", etiqueta: "Rams secs i preservats", nom: "Rams secs i preservats", buit: "rams secs i preservats" },
-  { id: "centres", seccio: "flors", etiqueta: "Centres", nom: "Centres", buit: "centres" },
-  { id: "nadal-rams", seccio: "nadal", etiqueta: "Rams", nom: "Rams de Nadal", buit: "rams de Nadal" },
-  { id: "nadal-corones", seccio: "nadal", etiqueta: "Corones", nom: "Corones de Nadal", buit: "corones de Nadal" },
-  { id: "nadal-centres", seccio: "nadal", etiqueta: "Centres", nom: "Centres de Nadal", buit: "centres de Nadal" },
+  { id: "frescos", slug: "frescos", seccio: "flors", etiqueta: "Rams frescos", nom: "Rams frescos", buit: "rams frescos" },
+  { id: "secs", slug: "secs", seccio: "flors", etiqueta: "Rams secs i preservats", nom: "Rams secs i preservats", buit: "rams secs i preservats" },
+  { id: "centres", slug: "centres", seccio: "flors", etiqueta: "Centres", nom: "Centres", buit: "centres" },
+  { id: "nadal-rams", slug: "rams", seccio: "nadal", etiqueta: "Rams", nom: "Rams de Nadal", buit: "rams de Nadal" },
+  { id: "nadal-corones", slug: "corones", seccio: "nadal", etiqueta: "Corones", nom: "Corones de Nadal", buit: "corones de Nadal" },
+  { id: "nadal-centres", slug: "centres", seccio: "nadal", etiqueta: "Centres", nom: "Centres de Nadal", buit: "centres de Nadal" },
 ] as const;
 
 export type CategoriaId = (typeof CATEGORIES)[number]["id"];

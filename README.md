@@ -1,22 +1,15 @@
-# Nunu Flowers — prototip web
+# Nunu Flowers — web
 
-Prototip navegable de la botiga Nunu Flowers, convertit de la maqueta HTML
-de revisió a un projecte Next.js perquè es pugui publicar amb una URL
-pròpia i compartir-la amb la clienta.
+Botiga en línia de Nunu Flowers (rams i centres de flor seca, preservada i
+fresca, productes de Nadal i encàrrecs per a casaments i esdeveniments), feta
+amb Next.js 16 (App Router), TypeScript estricte i CSS propi.
 
-**Què és i què no és.** Aquest projecte és el prototip de disseny —
-contingut i fotografies d'exemple, sense backend, sense pagaments i sense
-seguiment real de comandes (els formularis de Contacte i Seguiment són
-demostracions purament de client; la Cistella persisteix a `localStorage`
-del navegador, sense servidor). No és encara el lloc de producció descrit
-a `arquitectura.md`: totes les pantalles viuen sota una única ruta de
-l'App Router i commuten per JavaScript de client (`context/navigation.tsx`),
-sense URL pròpia per pantalla — límit conegut i documentat a l'ADR-002, que
-cal resoldre abans de fer SEO real o d'indexar el lloc. Quan arribi la fase
-de producció, cada pantalla es converteix en una ruta real amb metadades i
-dades estructurades pròpies, es connecta Stripe i/o Bizum (ADR-004,
-bloquejat per la situació fiscal de la clienta), i es dona d'alta la base
-de dades del catàleg i les comandes.
+**Estat.** El contingut (catàleg, mides i preus, textos d'Ocasions, Fires i
+fotografies) és el real de la Núria (document del 10/11/2026). Encara **no és
+una botiga operativa**: no hi ha pagament, ni base de dades, ni comandes reals
+(els formularis de Contacte i Seguiment són demostracions de client i la
+cistella es guarda a `localStorage`). L'estat detallat i les decisions són a
+`arquitectura.md` i `brief.md` del projecte de Claude «PAGINES WEB».
 
 ## Instal·lació
 
@@ -30,80 +23,105 @@ npm install
 npm run dev
 ```
 
-Obre http://localhost:3000
+Obre http://localhost:3000. Next.js 16 té canvis respecte a versions anteriors:
+llegeix la guia corresponent de `node_modules/next/dist/docs/` abans d'escriure
+codi nou (vegeu `AGENTS.md`).
 
 ## Comprovació abans de publicar
 
 ```bash
+npx tsc --noEmit
 npm run lint
 npm run build
 ```
 
-`npm run build` fa la comprovació de tipus de TypeScript en mode estricte
-i el build de producció; ha d'acabar sense errors abans de desplegar.
+`npm run build` ha d'acabar sense errors i ha de generar totes les rutes
+(`/`, `/flors/*`, `/nadal/*`, `/producte/*`, `/ocasions/*`, `/fires`,
+`/contacte`, `/seguiment`, `/admin`, `/robots.txt` i `/sitemap.xml`).
+
+## Rutes i SEO
+
+Cada pantalla té la seva URL real, generada estàticament (ADR-020):
+
+| Ruta | Pàgina |
+|---|---|
+| `/` | Inici |
+| `/flors`, `/flors/[frescos\|secs\|centres]` | Botiga de flors |
+| `/nadal/[rams\|corones\|centres]` | Botiga de Nadal (`/nadal` redirigeix a `/nadal/rams`) |
+| `/producte/[id]` | Fitxa de producte (id = `id` a `lib/data.ts`) |
+| `/ocasions`, `/ocasions/[casaments\|esdeveniments]` | Ocasions |
+| `/fires`, `/contacte` | Fires i Contacte |
+| `/seguiment`, `/admin` | Utilitat interna: **sempre `noindex`** |
+
+- `lib/routes.ts` és l'única font de veritat de les URLs.
+- `lib/seo.ts` genera títol, descripció, canònica, Open Graph i dades
+  estructurades (Organization, Product, BreadcrumbList) de cada pàgina.
+- `app/sitemap.ts` i `app/robots.ts` es generen sols a partir de `lib/data.ts`.
+
+### Variables d'entorn
+
+| Variable | Per a què | Per defecte |
+|---|---|---|
+| `INDEXABLE` | `true` permet que els cercadors indexin el lloc. Qualsevol altre valor (o cap) el deixa `noindex` i amb `Disallow: /` a `robots.txt`. | no definida (no indexable) |
+| `SITE_URL` | Adreça pública sense barra final (canòniques, sitemap, Open Graph). | `https://nunu-flowers-web.vercel.app` |
+
+Es llegeixen en temps de build: després de canviar-les cal tornar a desplegar.
 
 ## Estructura
 
 ```
 app/
-  layout.tsx          Metadades, fonts (next/font) i CSS global
-  globals.css         Tots els tokens i estils, portats de design-system.md
-  page.tsx            Punt d'entrada: commuta entre les 7 pantalles i munta
-                      el calaix de cistella (ADR-008)
+  layout.tsx            Metadades globals, fonts, Organization JSON-LD i <Providers>
+  globals.css           Tokens i estils
+  page.tsx              Inici
+  flors/, nadal/        Botiga per categoria (generateStaticParams)
+  producte/[id]/        Fitxa de producte
+  ocasions/, fires/, contacte/, seguiment/, admin/
+  sitemap.ts, robots.ts, not-found.tsx
 components/
-  SiteHeader.tsx        Capçalera flotant (comuna a totes les pantalles),
-                        amb el botó flotant de la cistella com a germà seu
-  SiteFooter.tsx        Peu de pàgina (variant "inici" i variant simple)
-  Carousel.tsx          Carrusel reutilitzable (fitxa de producte i projecte)
-  NavLink.tsx           Enllaç intern entre pantalles
-  BackLink.tsx          Botó de tornar enrere (§7.13 design-system.md)
-  ArrowLabel.tsx        Etiqueta amb fletxa animada
-  ProductCard.tsx       Targeta de producte ("Rams"), amb botó propi
-                        d'"Afegir a la cistella" independent del clic de
-                        navegació a la fitxa
-  QuantityStepper.tsx   Selector de quantitat (+/-) reutilitzat a la Fitxa
-                        de producte i al calaix de cistella
-  CistellaCalaix.tsx    Calaix lateral global de la cistella (ADR-008) —
-                        no és una pantalla de `screens/`, es munta un cop
-                        a `app/page.tsx` i se superposa a qualsevol pantalla
-  screens/              Les 7 pantalles: Inici, Botiga ("Rams"), Fitxa,
-                        Projectes ("Esdeveniments"), ProjecteDetall,
-                        Contacte i Seguiment
+  Providers.tsx         Navegació, estoc, cistella i calaix (munta al layout)
+  SiteHeader.tsx, SiteFooter.tsx, NavLink.tsx (next/link), BackLink.tsx
+  ProductCard.tsx, ProductImage.tsx, Carousel.tsx, QuantityStepper.tsx
+  CistellaCalaix.tsx    Calaix lateral de la cistella (ADR-008)
+  JsonLd.tsx            <script> JSON-LD amb escapament de `<`
+  pages/                Peces de pàgina compartides entre rutes
+  screens/              Una pantalla per component (reben el producte, la
+                        categoria o l'ocasió per props des de la ruta)
 context/
-  navigation.tsx      Estat de quina pantalla està activa
-  cart.tsx            Estat del carret (articles, quantitats, comentaris)
-                      i del calaix (obert/tancat), persistit a
-                      `localStorage` — sense backend (ADR-003, ADR-008)
-hooks/
-  useScrollThreshold.ts  Mostra/amaga la capçalera a Inici en fer scroll
-  useHeroParallax.ts     Parallax del text del hero
+  navigation.tsx        Pantalla activa derivada de la URL; goTo() fa router.push
+  cart.tsx              Cistella per producte + mida (`localStorage`, clau v2)
+  botiga.tsx            Estoc i sessió del panell intern (demostració)
 lib/
-  types.ts            Tipus compartits
-  data.ts             Contingut d'exemple (productes i projectes)
-public/assets/         Fotografies, logotip d'exemple i icona de cistella
-                      (`icona-cistella.png`, recolorida per CSS amb
-                      `mask-image`)
+  data.ts               Catàleg, categories, fires, textos d'ocasions i contacte
+  routes.ts             Pantalla/filtre <-> ruta real
+  seo.ts, site.ts       Metadades, JSON-LD i configuració d'entorn
+  types.ts              Tipus compartits
+public/assets/          Fotografies (`catalog/`, `client/`), logotip i icones
 ```
 
 ## Desplegament a Vercel
 
 ```bash
 npx vercel          # desplegament de prova
-npx vercel --prod    # desplegament de producció
+npx vercel --prod   # desplegament de producció
 ```
 
-Cal haver fet `vercel login` (o exportar `VERCEL_TOKEN`) abans amb el
-compte de Vercel on s'ha de publicar.
+Cal haver fet `vercel login` (o exportar `VERCEL_TOKEN`) amb el compte on
+s'ha de publicar.
 
-## Pendent abans de la versió pública real
+### Llançament
 
-- Fotografies definitives (ara marcades com "Foto d'exemple").
-- Catàleg complet i preus confirmats (`lib/data.ts`).
-- Textos legals: NIF, condicions de venda i dret de desistiment.
-- Enrutament real per pantalla — revertir ADR-002 (`arquitectura.md`):
-  necessari abans de qualsevol treball seriós de SEO (`seo.md`).
-- Passarel·la de pagament real (Stripe i/o Bizum) a `context/cart.tsx` i
-  `CistellaCalaix.tsx` — bloquejat per la situació fiscal de la clienta
-  (ADR-004).
-- Treure `robots: { index: false }` de `app/layout.tsx` quan es publiqui
-  la versió definitiva (ara mateix el prototip no s'ha d'indexar).
+1. Domini propi apuntant a Vercel.
+2. A Vercel: `SITE_URL=https://<domini>` i `INDEXABLE=true`; tornar a desplegar.
+3. Comprovar `https://<domini>/robots.txt` i que una fitxa mostra
+   `<meta name="robots" content="index, follow">`.
+4. Enviar `https://<domini>/sitemap.xml` a Google Search Console.
+
+## Pendent abans de la versió pública
+
+- Productes que falten (la Núria els afegirà quan arribi el material).
+- Textos legals: política de privacitat, condicions de venda i dret de
+  desistiment; NIF.
+- Pagament: decisió pendent (efectiu + Bizum o passarel·la); ADR-004.
+- Correu i Instagram reals (`CONTACTE` a `lib/data.ts` encara no estan confirmats).
+- Domini propi i `INDEXABLE=true` (vegeu Llançament).

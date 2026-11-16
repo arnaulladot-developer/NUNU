@@ -17,14 +17,34 @@ import "@fontsource/mulish/400.css";
 import "@fontsource/mulish/500.css";
 import "@fontsource/mulish/600.css";
 import "./globals.css";
+import { JsonLd } from "@/components/JsonLd";
+import { Providers } from "@/components/Providers";
+import { jsonLdOrganitzacio } from "@/lib/seo";
+import { IMATGE_PER_DEFECTE, INDEXABLE, NOM_LLOC, SITE_URL } from "@/lib/site";
+
+const DESCRIPCIO =
+  "Rams de flor seca compostos a mà al Penedès, i projectes a mida per a casaments i esdeveniments. Botiga en línia, sense local físic.";
 
 export const metadata: Metadata = {
-  title: "Nunu Flowers — Rams de flor seca fets a mà",
-  description:
-    "Rams de flor seca compostos a mà al Penedès, i projectes a mida per a casaments i esdeveniments. Botiga en línia, sense local físic.",
-  // Prototip de revisió amb la clienta — encara no és el lloc definitiu.
-  // Treure aquest bloc quan es publiqui la versió real (vegeu resposta).
-  robots: { index: false, follow: false },
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Nunu Flowers — Rams de flor seca fets a mà",
+    template: `%s | ${NOM_LLOC}`,
+  },
+  description: DESCRIPCIO,
+  openGraph: {
+    type: "website",
+    siteName: NOM_LLOC,
+    locale: "ca_ES",
+    title: "Nunu Flowers — Rams de flor seca fets a mà",
+    description: DESCRIPCIO,
+    images: [{ url: IMATGE_PER_DEFECTE }],
+  },
+  twitter: { card: "summary_large_image", images: [IMATGE_PER_DEFECTE] },
+  // Mentre no es publiqui (INDEXABLE=true, lib/site.ts) tot el lloc és noindex.
+  robots: INDEXABLE
+    ? { index: true, follow: true }
+    : { index: false, follow: false },
 };
 
 export default function RootLayout({
@@ -32,7 +52,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ca">
-      <body>{children}</body>
+      <body>
+        <JsonLd dades={jsonLdOrganitzacio()} />
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

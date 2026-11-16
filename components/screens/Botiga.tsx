@@ -4,12 +4,15 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { NavLink } from "@/components/NavLink";
 import { ProductCard } from "@/components/ProductCard";
-import { useNavigation } from "@/context/navigation";
-import { PRODUCTES, getCategoria } from "@/lib/data";
+import { PRODUCTES, getCategoria, type CategoriaId } from "@/lib/data";
 
-export function Botiga() {
-  const { filtre } = useNavigation();
-  const categoria = getCategoria(filtre);
+interface BotigaProps {
+  /** Sense categoria, la pàgina és "Flors" i mostra les flors. */
+  categoriaId?: CategoriaId;
+}
+
+export function Botiga({ categoriaId }: BotigaProps) {
+  const categoria = getCategoria(categoriaId ?? null);
   // Sense filtre, la pàgina "Flors" mostra les flors; Nadal té el seu menú.
   const productes = PRODUCTES.filter((producte) =>
     categoria

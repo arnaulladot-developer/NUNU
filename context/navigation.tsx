@@ -5,15 +5,16 @@ import {
   useCallback,
   useContext,
   useMemo,
-  useState,
   type ReactNode,
 } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { parseRuta, rutaPer } from "@/lib/routes";
 import type { ScreenId } from "@/lib/types";
 
 interface NavigationContextValue {
   screen: ScreenId;
   /** Secció dins de la pantalla (p. ex. "secs" a Flors, "casaments" a
-   * Ocasions); `null` vol dir la pantalla sencera. */
+   * Ocasions, l'id del producte a la fitxa); `null` vol dir la pantalla sencera. */
   filtre: string | null;
   goTo: (screen: ScreenId, filtre?: string) => void;
 }
@@ -21,23 +22,23 @@ interface NavigationContextValue {
 const NavigationContext = createContext<NavigationContextValue | null>(null);
 
 /**
- * Substitueix el `data-va-a` + listener delegat de la maqueta HTML original:
- * un únic estat en memòria decideix quina pantalla es renderitza. Cada
- * canvi de pantalla porta l'usuari a dalt de tot, exactament com feia
- * `window.scrollTo({top:0, behavior:'instant'})` a l'script original.
+ * Pont entre l'API "pantalla + filtre" dels components i les rutes reals
+ * de l'App Router (ADR-017, arquitectura-addenda-2026-11.md). La pantalla
+ * activa es deriva de la URL, no d'un estat propi: recarregar, tornar enrere
+ * o obrir un enllaç compartit porta sempre a la pàgina correcta. L'scroll a
+ * dalt en canviar de ruta el fa el router de Next.js.
  */
 export function NavigationProvider({ children }: { children: ReactNode }) {
-  const [destinacio, setDestinacio] = useState<{
-    screen: ScreenId;
-    filtre: string | null;
-  }>({ screen: "inici", filtre: null });
+  const pathname = usePathname();
+  const router = useRouter();
+  const destinacio = useMemo(() => parseRuta(pathname), [pathname]);
 
-  const goTo = useCallback((next: ScreenId, filtre?: string) => {
-    setDestinacio({ screen: next, filtre: filtre ?? null });
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }
-  }, []);
+  const goTo = useCallback(
+    (screen: ScreenId, filtre?: string) => {
+      router.push(rutaPer(screen, filtre));
+    },
+    [router],
+  );
 
   const value = useMemo(
     () => ({ screen: destinacio.screen, filtre: destinacio.filtre, goTo }),

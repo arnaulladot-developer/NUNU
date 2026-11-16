@@ -4,47 +4,14 @@ import { useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { BackLink } from "@/components/BackLink";
-import { NavLink } from "@/components/NavLink";
 import { Carousel } from "@/components/Carousel";
 import { QuantityStepper } from "@/components/QuantityStepper";
 import { useCart } from "@/context/cart";
 import { useBotiga } from "@/context/botiga";
-import { useNavigation } from "@/context/navigation";
-import {
-  CONTACTE,
-  getCategoria,
-  getProducteById,
-  type Producte,
-} from "@/lib/data";
+import { CONTACTE, getCategoria, type Producte } from "@/lib/data";
 
-/** Fitxa d'un producte; el producte el decideix el filtre de navegació. */
-export function Fitxa() {
-  const { filtre } = useNavigation();
-  const producte = getProducteById(filtre);
-
-  if (!producte) {
-    return (
-      <section>
-        <SiteHeader />
-        <div className="contenidor">
-          <div className="estat-buit">
-            <h1>No trobem aquest producte</h1>
-            <p>Potser ja no és a la botiga. Mira què tenim ara mateix.</p>
-            <NavLink to="botiga" className="boto boto-principal">
-              Anar a la botiga
-            </NavLink>
-          </div>
-        </div>
-        <SiteFooter />
-      </section>
-    );
-  }
-
-  // `key` reinicia la mida i la quantitat en passar d'un producte a un altre.
-  return <FitxaProducte key={producte.id} producte={producte} />;
-}
-
-function FitxaProducte({ producte }: { producte: Producte }) {
+/** Fitxa d'un producte; el producte el decideix la ruta (`/producte/[id]`). */
+export function Fitxa({ producte }: { producte: Producte }) {
   const { afegir } = useCart();
   const { esExhaurit } = useBotiga();
   const exhaurit = esExhaurit(producte.id);

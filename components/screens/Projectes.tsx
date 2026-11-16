@@ -4,7 +4,6 @@ import Image from "next/image";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { NavLink } from "@/components/NavLink";
-import { useNavigation } from "@/context/navigation";
 import {
   CONTACTE,
   FOTOS_ESDEVENIMENTS,
@@ -65,15 +64,24 @@ function SeccioOcasio({ id, nom, titolPrincipal }: { id: OcasioId; nom: string; 
   );
 }
 
-export function Projectes() {
-  const { filtre } = useNavigation();
-  const ocasio = getOcasio(filtre);
+interface ProjectesProps {
+  /** Sense ocasió, la pàgina mostra Casaments i Esdeveniments. */
+  ocasioId?: OcasioId;
+}
+
+export function Projectes({ ocasioId }: ProjectesProps) {
+  const ocasio = getOcasio(ocasioId ?? null);
   const seccions = ocasio ? [ocasio] : OCASIONS;
 
   return (
     <section>
       <SiteHeader />
       <div className="contenidor">
+        {seccions.length > 1 && (
+          <div className="pagina-cap">
+            <h1>Casaments i esdeveniments</h1>
+          </div>
+        )}
         {seccions.map((seccio) => (
           <SeccioOcasio
             key={seccio.id}

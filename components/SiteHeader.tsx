@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { NavLink } from "@/components/NavLink";
 import { useCart } from "@/context/cart";
 import { useNavigation } from "@/context/navigation";
@@ -162,6 +163,7 @@ function Desplegable({ id, etiqueta, actiu, items, onNavigate }: DesplegableProp
 export function SiteHeader() {
   const [menuObert, setMenuObert] = useState(false);
   const { screen, filtre } = useNavigation();
+  const pathname = usePathname();
   const { totalArticles, commutarCalaix } = useCart();
   // La Botiga i la fitxa serveixen Flors i Nadal: la secció activa la decideix
   // la categoria del filtre (o la del producte, a la fitxa).
@@ -171,7 +173,10 @@ export function SiteHeader() {
     (screen === "botiga" || screen === "fitxa") &&
     getCategoria(idCategoria)?.seccio === "nadal"
       ? "nadal"
-      : SECCIO_PER_PANTALLA[screen];
+      : // Una ruta desconeguda (404) també es llegeix com "inici": no s'hi subratlla res.
+        screen === "inici" && pathname !== "/"
+        ? undefined
+        : SECCIO_PER_PANTALLA[screen];
 
   function tancaTot() {
     setMenuObert(false);

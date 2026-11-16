@@ -1,12 +1,7 @@
 /**
- * Identificador de cada pantalla del prototip. El prototip és una única
- * pàgina que commuta de "pantalla" en memòria (com feia la maqueta HTML
- * original amb `data-va-a`) — no és encara enrutament real per URL.
- * Quan el projecte passi a producció (ADR-001, arquitectura.md), cada
- * valor d'aquest tipus es converteix en una ruta real de l'App Router
- * (per exemple `/botiga`, `/producte/[slug]`), amb metadades i dades
- * estructurades pròpies — imprescindible per al SEO tècnic que exigeix
- * seo.md i que una SPA d'una sola pàgina no pot oferir.
+ * Identificador de cada pantalla. Les pantalles tenen ruta real (ADR-020,
+ * arquitectura.md); `lib/routes.ts` fa la correspondència entre aquest tipus
+ * i la URL, i és l'únic lloc que la coneix.
  */
 export type ScreenId =
   | "inici"
@@ -18,5 +13,5 @@ export type ScreenId =
   | "seguiment"
   /** Panell intern de la propietària (ADR-014). No surt a cap menú: només
    * s'hi arriba introduint les credencials de demostració al formulari de
-   * Seguiment. No és una pantalla pública i no s'ha d'indexar mai. */
+   * Seguiment. No és una pantalla pública i no s'indexa mai (`/admin`). */
   | "admin";
