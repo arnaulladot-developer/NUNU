@@ -74,6 +74,12 @@ const MIDES_RAM: [Mida, ...Mida[]] = [
   { id: "L", etiqueta: "L", detall: "Gran · 25 cm de diàmetre", preu: 25 },
 ];
 
+const MIDES_CORONA: [Mida, ...Mida[]] = [
+  { id: "S", etiqueta: "S", detall: "20 cm de diàmetre", preu: 15 },
+  { id: "M", etiqueta: "M", detall: "25 cm de diàmetre", preu: 25 },
+  { id: "L", etiqueta: "L", detall: "35 cm de diàmetre", preu: 35 },
+];
+
 const LLARGADA_RAM = "Llargada aproximada: 30–40 cm.";
 
 const VARIACIONS_RAM =
@@ -81,7 +87,7 @@ const VARIACIONS_RAM =
 
 /**
  * Catàleg real, tal com el va escriure la Núria al document de textos
- * (10/11/2026). Els preus i les mides són els del document. Falten
+ * (10/11/2026, ampliat el 26/11/2026 amb les corones Canyella, Nòrdica i Neu i el Centre Nit de Nadal). Els preus i les mides són els del document. Falten
  * productes: la Núria acabarà de preparar-los quan li arribi el material
  * (1-2 setmanes) i vol publicar a principis de desembre.
  */
@@ -343,11 +349,7 @@ export const PRODUCTES: Producte[] = [
       "Acabat amb llaç de cotó a quadres estil tradicional.",
       "Elaboració 100% artesanal.",
     ],
-    mides: [
-      { id: "S", etiqueta: "S", detall: "20 cm de diàmetre", preu: 15 },
-      { id: "M", etiqueta: "M", detall: "25 cm de diàmetre", preu: 25 },
-      { id: "L", etiqueta: "L", detall: "35 cm de diàmetre", preu: 35 },
-    ],
+    mides: MIDES_CORONA,
     fotos: [
       { src: "/assets/catalog/corona-alsacia-1.jpg", alt: "Corona Alsàcia: avet i verds naturals amb llaç de quadres vermells, taronja deshidratada, pinyes, fruits vermells i canyella" },
     ],
@@ -374,6 +376,98 @@ export const PRODUCTES: Producte[] = [
       { src: "/assets/catalog/centre-alsacia-1.jpg", alt: "Centre Alsàcia: cistell amb avet, pinyes, hortènsies seques i llaç de quadres" },
       { src: "/assets/catalog/centre-alsacia-2.jpg", alt: "Detall de les rodanxes de taronja deshidratada i l'avet del Centre Alsàcia" },
       { src: "/assets/catalog/centre-alsacia-3.jpg", alt: "Centre Alsàcia vist de prop: hortènsia seca, pinyes, taronja deshidratada i llaç de quadres sobre una cistella" },
+    ],
+  },
+  {
+    id: "corona-canyella",
+    nom: "Corona Canyella",
+    categoria: "nadal-corones",
+    resum: "Avet i xiprer, cítrics deshidratats, canyella i llaç de vellut mostassa.",
+    descripcio: [
+      "Inspirada en la serenor i la calidesa de la natura a l'hivern, on els aromes suaus i els tons terrosos prenen tot el protagonisme. Aquesta corona està elaborada sobre una base d'avet, xiprer i verdors naturals, decorada amb rodanxes de cítrics deshidratats, pinyes, petits ramells de flor seca blanca i generoses branques de canyella lligades amb cordill rústic i anís estrellat. L'acabat el corona un elegant llaç de vellut en to mostassa daurat, aportant una llum suau i sofisticada per donar la benvinguda a casa teva.",
+      "Una composició pensada per omplir la porta o qualsevol racó de textura, elegància natural i una fragància acollidora durant totes les festes.",
+      "Elaborada artesanalment, cada corona és única i pot presentar petites variacions respecte a la fotografia segons la disponibilitat dels elements naturals.",
+    ],
+    caracteristiques: [
+      "Base d'avet, xiprer i verdor natural de temporada.",
+      "Elements decoratius: cítrics deshidratats, pinyes, flor seca i espècies aromàtiques (canyella i anís estrellat).",
+      "Acabat amb llaç de vellut en to mostassa daurat.",
+      "Ideal per penjar a la porta o decorar parets interiors.",
+      "Elaboració 100% artesanal.",
+    ],
+    mides: MIDES_CORONA,
+    fotos: [
+      { src: "/assets/catalog/corona-canyella-1.jpg", alt: "Corona Canyella penjada d'una porta grisa: avet i xiprer amb llaç de vellut mostassa, branques de canyella, pinyes i cítrics deshidratats" },
+      { src: "/assets/catalog/corona-canyella-2.jpg", alt: "Detall de la Corona Canyella: llaç de vellut mostassa, canyella lligada amb cordill, anís estrellat i flor seca blanca" },
+    ],
+  },
+  {
+    id: "corona-nordica",
+    nom: "Corona Nòrdica",
+    categoria: "nadal-corones",
+    resum: "Avet, taronja deshidratada, pinyes i llaç estampat vermell i blanc.",
+    descripcio: [
+      "Inspirada en l'escalfor de les cases d'hivern i els aromes tradicionals de Nadal, aquesta corona combina una base frondosa d'avet natural amb rodanxes de taronja deshidratada, pinyes, boletes vermelles i estrelles d'anís. El toc final el posa un llaç estampat en tons vermells i blancs, amb cinta per penjar, que aporta caràcter i esperit festiu a qualsevol entrada.",
+      "Una peça plena de textura, color i aroma natural, pensada per donar una benvinguda càlida i nadalenca des del primer moment.",
+      "Elaborada artesanalment, cada corona és única i pot presentar petites variacions respecte a la fotografia segons la disponibilitat dels elements naturals.",
+    ],
+    caracteristiques: [
+      "Base d'avet i verdor natural de temporada.",
+      "Elements decoratius: taronja deshidratada, pinyes, fruits vermells i anís estrellat.",
+      "Acabat amb llaç estampat en tons vermells i blancs.",
+      "Ideal per penjar a la porta o en parets interiors.",
+      "Elaboració 100% artesanal.",
+    ],
+    mides: MIDES_CORONA,
+    fotos: [
+      { src: "/assets/catalog/corona-nordica-1.jpg", alt: "Corona Nòrdica penjada d'una porta: avet amb llaç estampat vermell i beix, taronja deshidratada, pinyes, boletes vermelles i anís estrellat" },
+      { src: "/assets/catalog/corona-nordica-2.jpg", alt: "Detall de la Corona Nòrdica: rodanxes de taronja deshidratada, pinyes, boletes vermelles i el llaç estampat" },
+    ],
+  },
+  {
+    id: "corona-neu",
+    nom: "Corona Neu",
+    categoria: "nadal-corones",
+    resum: "Avet, flors de cotó, cítrics deshidratats i llaç de quadres vichy.",
+    descripcio: [
+      "Inspirada en la suavitat dels primers flocs de neu i la calidesa de les cases de muntanya a l'hivern. Aquesta corona està elaborada sobre una base frondosa d'avet, xiprer i verdors naturals, decorada amb esponjoses flors de cotó blanc, rodanxes de cítrics deshidratats, pinyes i petits fruits vermells que aporten un toc de color viu. L'acabat el corona un llaç de quadres vichy en to marró torrat i blanc, amb cinta per penjar, que li dona un aire rústic, dolç i molt acollidor.",
+      "Una peça plena de textura i contrastos naturals, pensada per donar una benvinguda càlida i encantadora a la porta de casa teva.",
+      "Elaborada artesanalment, cada corona és única i pot presentar petites variacions respecte a la fotografia segons la disponibilitat dels elements naturals.",
+    ],
+    caracteristiques: [
+      "Base d'avet, xiprer i verdor natural de temporada.",
+      "Elements decoratius: flors de cotó natural, cítrics deshidratats, pinyes i fruits vermells.",
+      "Acabat amb llaç de quadres vichy en to marró torrat i blanc.",
+      "Ideal per penjar a la porta o decorar parets interiors.",
+      "Elaboració 100% artesanal.",
+    ],
+    mides: MIDES_CORONA,
+    fotos: [
+      { src: "/assets/catalog/corona-neu-1.jpg", alt: "Corona Neu penjada d'una porta verda: avet i xiprer amb flors de cotó blanc, cítrics deshidratats, pinyes, fruits vermells i llaç de quadres marró i blanc" },
+      { src: "/assets/catalog/corona-neu-2.jpg", alt: "Detall de la Corona Neu: flors de cotó, rodanxes de cítrics deshidratats, pinyes i fruits vermells" },
+    ],
+  },
+  {
+    id: "centre-nit-de-nadal",
+    nom: "Centre Nit de Nadal",
+    categoria: "nadal-centres",
+    resum: "Centre de taula en cistella trenada amb espelma i llaç de vellut granat.",
+    descripcio: [
+      "Inspirat en la màgia de les sobretaules d'hivern i la llum càlida de les espelmes, aquest centre de taula està muntat sobre una cistella trenada artesanalment que aporta un toc rústic i acollidor. Combina una base natural d'avet, branquillons de pi i fulles d'eucaliptus amb rodanxes de taronja deshidratada, pinyes i petits fruits vermells. El protagonisme el pren una espelma alta en to crema acompanyada d'un elegant llaç de vellut en to teula granat amb acabats naturals, creant un punt de llum únic per presidir la taula.",
+      "Una composició pensada per vestir les celebracions amb elegància natural, textura i una fragància fresca de bosc durant totes les festes.",
+      "Elaborat artesanalment, cada centre és únic i pot presentar petites variacions respecte a la fotografia segons la disponibilitat dels elements naturals.",
+    ],
+    caracteristiques: [
+      "Base en cistella trenada amb avet, pi, eucaliptus i verdor natural de temporada.",
+      "Elements decoratius: taronja deshidratada, pinya, fruits vermells i espelma alta en to crema.",
+      "Acabat amb llaç de vellut en to granat/teula.",
+      "Dissenyat com a centre de taula.",
+      "Elaboració 100% artesanal.",
+    ],
+    mides: [{ id: "unica", etiqueta: "Única", detall: "Mida única", preu: 25 }],
+    fotos: [
+      { src: "/assets/catalog/centre-nit-de-nadal-1.jpg", alt: "Centre Nit de Nadal: espelma alta crema entre avet, eucaliptus, taronja deshidratada i pinya, amb un llaç de vellut teula" },
+      { src: "/assets/catalog/centre-nit-de-nadal-2.jpg", alt: "Detall del Centre Nit de Nadal: espelma, rodanxes de taronja deshidratada, pinya, fruits vermells i llaç de vellut granat" },
     ],
   },
 ];
