@@ -17,7 +17,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
+# local env files (.env.example sí que es puja: no duu cap valor real)
+.env
 .env*.local
 
 # vercel
